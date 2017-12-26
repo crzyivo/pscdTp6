@@ -5,6 +5,8 @@
   Descarga los archivos del repositorio en una carpeta con el mismo nombre
   (en nuestro caso *pscdTp6*). 
   Para los comandos sobre este git situarse dentro de esta carpeta creada.
+* **git status**
+  Muestra archivos añadidos y/o modificados que estan listos para commit y los necesitan add 
 * **git add [nombre de fichero]**
   Añade un fichero al repositorio **local** 
 * **git commit -m "Texto describiendo los cambios"**
