@@ -5,7 +5,10 @@ NIP     NOMBRE
 747325  Victor M lafuente Ayuda
 ------------------------------------------
 
-Fecha          Tiempo         Autor     Concepto
+Fecha          Tiempo         Autor        Concepto
+---------   -------------   --------    ---------------
 22-12-17     11.00/12.30     684146     Reunion grupal
 22-12-17     11.00/12.30     739324     Reunion grupal
 22-12-17     11.00/12.30     747325     Reunion grupal
+
+26-12-17    13.00/14.00      747325     Modulo Subasta(primer boceto)
