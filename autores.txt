@@ -12,3 +12,4 @@ Fecha          Tiempo         Autor        Concepto
 22-12-17     11.00/12.30     747325     Reunion grupal
 
 26-12-17    13.00/14.00      747325     Modulo Subasta(primer boceto)
+02-01-18    15.30/16.20      747325     Modulo Subasta
