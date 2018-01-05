@@ -25,7 +25,7 @@ int puertoSubasta = 32005;
 
 
 void subastaCliente(Socket *subasta, int cliente){
-	const maxMensaje = 1000;
+	const int maxMensaje = 1000;
 	while(1/*Condicion cliente desconectado*/){
 		int precioInicial = mSubas.comenzarSubasta();
 		string mensajeIn = "";
