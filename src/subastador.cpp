@@ -54,7 +54,22 @@ void subastaCliente(Socket *subasta, int cliente){
 }
 
 int main(int argc, char * argv[]){
-	
+		if(argc >1){	//Inicializa con Parametros
+		for (int i = 1; i< argc; i++){
+			if(*argv[i]++ == '-'){
+				if(*argv[i] == 'p'){		//numero de vueltas
+					puertoSubasta = atoi(++argv[i]);
+				}else if(*argv[i] == 'd'){	//mnumero surtidores
+					dir = ++argv[i];
+				}else{
+					cout << "Uso: [-p<puerto>] [-d<direccion>]\n";
+					cout << "\t-p<puerto>: puerto del servidor\n";
+					cout << "\t-d<direccion>: direccion servidor\n";
+					exit(1);
+				}
+			}
+		}
+	}
 	Socket subasta(puertoSubasta);
 	
 	int sockSubasta = subasta.Bind();
@@ -64,7 +79,7 @@ int main(int argc, char * argv[]){
 		//Abrir Salon
 		int cliente = subasta.Accept();
 		thread th(&subastaCliente, &subasta,cliente);
-		//th.detach();
+		th.detach();
 		// esperar a que puedan entrar más clientes a Subasta
 
 	}
