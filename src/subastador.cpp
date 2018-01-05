@@ -54,6 +54,7 @@ void subastaCliente(Socket *subasta, int cliente){
 }
 
 int main(int argc, char * argv[]){
+	string dir;
 		if(argc >1){	//Inicializa con Parametros
 		for (int i = 1; i< argc; i++){
 			if(*argv[i]++ == '-'){
