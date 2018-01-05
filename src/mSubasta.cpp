@@ -9,7 +9,8 @@ monitorSubasta::monitorSubasta(){
 monitorSubasta::~monitorSubasta(){
     
 }
-//devuelve el precio inicial marcado
+//devuelve el precio inicial marcado de manera que todos los procesos
+// comiencen la subasta al mismo tiempo
 int monitorSubasta::comenzarSubasta(){
     return pujaMinima;
 }
