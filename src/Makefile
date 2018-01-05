@@ -1,6 +1,7 @@
 
-all: subastador
+all: subastador cliente
 
+#Subastador
 subastador: subastador.cpp Socket.o mSubasta.o
 	g++ -std=c++11 -pthread -o subastador subastador.cpp Socket.o mSubasta.o
 
@@ -9,3 +10,8 @@ Socket.o: Socket.cpp
 
 mSubasta.o: mSubasta.cpp
 	g++ -c -std=c++11 mSubasta.cpp
+	
+#Cliente
+
+cliente: Cliente.cpp Socket.o 
+	g++ -std=c++11 -pthread -o cliente Cliente.cpp Socket.o 

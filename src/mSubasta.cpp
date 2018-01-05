@@ -29,7 +29,7 @@ int monitorSubasta::PujadorActual(){
 }
 //devuelve true si y solo si se pueden conectar clientes
 bool monitorSubasta::SalonAbierto(){
-
+    return !fin_Subastas;
 }
 //Cierra todas las posibles subastas nuevas
 bool monitorSubasta::CerrarSalon(){
