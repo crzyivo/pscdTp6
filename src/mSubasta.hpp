@@ -2,7 +2,6 @@
 #define MSUBASTA_HPP
 
 #define Accepto "Acepto\n"
-#define Subo "Subo %d\n"
 #define Pasa "Paso\n"
 #define SaltarPujas "Salir puja Actual\n"
 #define SalirSubasta "Salir de subasta\n"
@@ -20,8 +19,9 @@ private:
 	int pujaMasAlta;
 	int pujaMinima;
 	int numPujas;
+	int numPujasSend;
 	bool fin_Subastas;
-	recursive_mutex mtx;        
+	mutex mtx;        
 	condition_variable_any cv;	
 public:
 	monitorSubasta();
@@ -31,10 +31,14 @@ public:
 	//reactualiza la proxima minima puja que se aceptara
 	//devuelve true si y solo si la puja ha sido superada
 	bool pujar(int pujaCliente, int cliente);
+	//Devuelve el cardinal de pujadores de la ronda actual
+	int nPujas();
 	//devuelve la acual puja
 	int pujaActual();
 	//devuelve el socket del actual cliente con una puja mayor
 	int PujadorActual();
+	//Despierta a los procesos que estan esperando a enviar una puja
+	void enviarPuja();
 	//devuelve true si y solo si se pueden conectar clientes
 	bool SalonAbierto();
 	//Cierra todas las posibles subastas nuevas

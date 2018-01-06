@@ -36,7 +36,6 @@ void subastaCliente(Socket *subasta, int cliente){
 		while(seguirPuja){
 			subasta->Send(cliente, mensajeOut);
 			subasta->Recv(cliente, mensajeIn,maxMensaje);
-			int pujaCliente;
 			//tratar mensajeIn
 			if(mensaje == SaltarPujas){
 				seguirPuja = false;
@@ -46,13 +45,19 @@ void subastaCliente(Socket *subasta, int cliente){
 				seguirSubasta = false;
 				subasta->Send(cliente, "Saliendo del salon de subastas. Hasta pronto\n")
     		}else{
-				if(mSubas.pujar(pujaCliente, cliente)){
-					mensajeOut = "Hay" +  + " aceptada. Quien ofrece\n" + to_string(mSubas.pujaActual()+10) + "\n";
-    			}else{
-					mensajeOut = "Puja no valida. Actual puja " + to_string(mSubas.PujadorActual()) + to_string(mSubas.pujaActual()) + "\n";
+				mSubas.pujar(mensajeIn, cliente);
+				int numPujadores;
+				switch(numPujadores = subasta.nPujas()){
+				case 0://Nadie ha pujado
+					mensajeOut = "Ganador de la puja\n";
+					break;
+				case 1://Solo hay una puja mas alta
+					mensajeOut = "Cliente X";
+					break;
+				default:// >1 pujador
+					mensajeOut = "Hay " + to_string(numPujadores) + ". Quien ofrece: " +to_string(mSubas.pujaActual()+10) + "\n";
 				}
 			}
-
 		}
 	}
 	int error = subasta->Close(cliente);
