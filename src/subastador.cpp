@@ -19,7 +19,6 @@
  **********************/ 
 const int maxNumCLientes = 35;
 monitorSubasta mSubas;
-list<int> clientes;
 
 int puertoSubasta = 32005;
 
@@ -27,7 +26,7 @@ int puertoSubasta = 32005;
 void subastaCliente(Socket *subasta, int cliente){
 	bool enSubasta = true;
 	const int maxMensaje = 1000;
-	while(seguirSubasta = true && !subasta.CerrarSalon() ){
+	while(enSubasta && !mSubas.CerrarSalon()){
 		//esperar a que se dé la condición de iniciar subasta
 		int precioInicial = mSubas.comenzarSubasta();
 		string mensajeIn = "";
@@ -37,17 +36,17 @@ void subastaCliente(Socket *subasta, int cliente){
 			subasta->Send(cliente, mensajeOut);
 			subasta->Recv(cliente, mensajeIn,maxMensaje);
 			//tratar mensajeIn
-			if(mensaje == SaltarPujas){
+			if(mensajeIn == SaltarPujas){
 				seguirPuja = false;
 				subasta->Send(cliente, "Saliendo de subasta actual, esperando a que termine\n");
-    		}else if(mensaje == SalirSubasta){
+    		}else if(mensajeIn == SalirSubasta){
 				seguirPuja = false;
-				seguirSubasta = false;
-				subasta->Send(cliente, "Saliendo del salon de subastas. Hasta pronto\n")
+				enSubasta = false;
+				subasta->Send(cliente, "Saliendo del salon de subastas. Hasta pronto\n");
     		}else{
 				mSubas.pujar(mensajeIn, cliente);
 				int numPujadores;
-				switch(numPujadores = subasta.nPujas()){
+				switch(numPujadores = mSubas.nPujas()){
 				case 0://Nadie ha pujado
 					mensajeOut = "Ganador de la puja\n";
 					break;
@@ -84,7 +83,7 @@ int main(int argc, char * argv[]){
 			}
 		}
 	}
-	puertoSubasta = 25000;
+//	puertoSubasta = 25000;
 	Socket subasta(puertoSubasta);
         cout<<"Puerto de la subasta"<<puertoSubasta<<endl;
 	

@@ -21,7 +21,7 @@ private:
 	int numPujas;
 	int numPujasSend;
 	bool fin_Subastas;
-	mutex mtx;        
+	mutex exclusion;        
 	condition_variable_any cv;	
 public:
 	monitorSubasta();
@@ -30,7 +30,7 @@ public:
 	int comenzarSubasta();
 	//reactualiza la proxima minima puja que se aceptara
 	//devuelve true si y solo si la puja ha sido superada
-	bool pujar(int pujaCliente, int cliente);
+	void pujar(string mensaje, int cliente);
 	//Devuelve el cardinal de pujadores de la ronda actual
 	int nPujas();
 	//devuelve la acual puja
