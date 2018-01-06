@@ -71,9 +71,11 @@ int main(int argc, char * argv[]){
 		for (int i = 1; i< argc; i++){
 			if(*argv[i]++ == '-'){
 				if(*argv[i] == 'p'){		//numero de vueltas
-					puertoSubasta = atoi(++argv[i]);
+					if(*++argv[i] == '\0'){i++;/*saltar espacio en blanco*/}
+					puertoSubasta = atoi(argv[i]);
 				}else if(*argv[i] == 'd'){	//mnumero surtidores
-					dir = ++argv[i];
+					if(*++argv[i] == '\0'){i++; /*saltar espacio en blanco*/}
+					dir = argv[i];
 				}else{
 					cout << "Uso: [-p<puerto>] [-d<direccion>]\n";
 					cout << "\t-p<puerto>: puerto del servidor\n";
@@ -85,7 +87,7 @@ int main(int argc, char * argv[]){
 	}
 //	puertoSubasta = 25000;
 	Socket subasta(puertoSubasta);
-        cout<<"Puerto de la subasta"<<puertoSubasta<<endl;
+        cout<<"Puerto de la subasta "<< puertoSubasta << endl;
 	
 	int sockSubasta = subasta.Bind();
         if (sockSubasta == -1) {
