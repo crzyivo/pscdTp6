@@ -19,6 +19,7 @@ private:
 	int pujadorMasAlto;
 	int pujaMasAlta;
 	int pujaMinima;
+	int numPujas;
 	bool fin_Subastas;
 	recursive_mutex mtx;        
 	condition_variable_any cv;	

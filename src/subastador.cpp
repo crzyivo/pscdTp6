@@ -25,26 +25,34 @@ int puertoSubasta = 32005;
 
 
 void subastaCliente(Socket *subasta, int cliente){
+	bool enSubasta = true;
 	const int maxMensaje = 1000;
-	while(1/*Condicion cliente desconectado*/){
+	while(seguirSubasta = true && !subasta.CerrarSalon() ){
+		//esperar a que se dé la condición de iniciar subasta
 		int precioInicial = mSubas.comenzarSubasta();
 		string mensajeIn = "";
 		string mensajeOut = "Comienza la subasta en " + to_string(precioInicial) + "\n";
-		
-		//esperar a que se dé la condición de iniciar subasta
-		while(1/*Condición de fin subasta Actual*/){
+		bool seguirPuja = true;
+		while(seguirPuja){
 			subasta->Send(cliente, mensajeOut);
 			subasta->Recv(cliente, mensajeIn,maxMensaje);
 			int pujaCliente;
 			//tratar mensajeIn
-			//leer mensaje
-			if(mSubas.pujar(pujaCliente, cliente)){
-				mensajeOut = "Puja cliente " + to_string(cliente) + " aceptada. Quien ofrece\n" + to_string(mSubas.pujaActual()+10) + "\n";
-			}else{
-				mensajeOut = "Puja no valida. Actual puja " + to_string(mSubas.PujadorActual()) + to_string(mSubas.pujaActual()) + "\n";
+			if(mensaje == SaltarPujas){
+				seguirPuja = false;
+				subasta->Send(cliente, "Saliendo de subasta actual, esperando a que termine\n");
+    		}else if(mensaje == SalirSubasta){
+				seguirPuja = false;
+				seguirSubasta = false;
+				subasta->Send(cliente, "Saliendo del salon de subastas. Hasta pronto\n")
+    		}else{
+				if(mSubas.pujar(pujaCliente, cliente)){
+					mensajeOut = "Hay" +  + " aceptada. Quien ofrece\n" + to_string(mSubas.pujaActual()+10) + "\n";
+    			}else{
+					mensajeOut = "Puja no valida. Actual puja " + to_string(mSubas.PujadorActual()) + to_string(mSubas.pujaActual()) + "\n";
+				}
 			}
-			mensajeIn = "";
-			subasta->Recv(cliente, mensajeIn,maxMensaje);
+
 		}
 	}
 	int error = subasta->Close(cliente);
