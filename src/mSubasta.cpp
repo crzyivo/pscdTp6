@@ -16,8 +16,20 @@ int monitorSubasta::comenzarSubasta(){
 }
 //reactualiza la proxima minima puja que se aceptara
 //devuelve true si y solo si la puja ha sido superada
-bool monitorSubasta::pujar(int pujaCliente, int cliente){
+bool monitorSubasta::pujar(string mensaje, int cliente){
+    if(mensaje == Accepto){
 
+    }else if(mensaje == Paso){
+        
+    }else if(mensaje == SaltarPujas){
+        
+    }else if(mensaje == SalirSubasta){
+
+    }else{
+        int puja;
+        sscanf("Subo %d\n", puja);
+        if(puja > this->pujaActual())
+    }
 }
 //devuelve la acual puja
 int monitorSubasta::pujaActual(){

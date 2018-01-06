@@ -1,6 +1,11 @@
 #ifndef MSUBASTA_HPP
 #define MSUBASTA_HPP
 
+#define Accepto "Acepto\n"
+#define Subo "Subo %d\n"
+#define Pasa "Paso\n"
+#define SaltarPujas "Salir puja Actual\n"
+#define SalirSubasta "Salir de subasta\n"
 #include <iostream>
 #include <mutex>
 #include <condition_variable>
