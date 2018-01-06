@@ -71,10 +71,22 @@ int main(int argc, char * argv[]){
 			}
 		}
 	}
+	puertoSubasta = 25000;
 	Socket subasta(puertoSubasta);
+        cout<<"Puerto de la subasta"<<puertoSubasta<<endl;
 	
 	int sockSubasta = subasta.Bind();
+        if (sockSubasta == -1) {
+        cerr << "Error en el bind: " << strerror(errno) << endl;
+        exit(1);
+        }
 	int error = subasta.Listen(maxNumCLientes);
+        if(error == -1) {
+        cerr << "Error en el listen: " << strerror(errno) << endl;
+        // Cerramos el socket
+        subasta.Close(sockSubasta);
+        exit(1);
+        }
 
 	while(mSubas.SalonAbierto()){
 		//Abrir Salon
