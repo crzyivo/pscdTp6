@@ -135,6 +135,7 @@ int main(int argc, char *argv[]) {
 			  read_bytes = socket.Send(socket_fd,"Acepto\n");
 		  }else if(puja == "ss"){
 			read_bytes = socket.Send(socket_fd,"Salir de subasta\n");
+			break;//QUITAAAARR!!!!
 		  }else if(puja == "sp"){	
 			read_bytes = socket.Send(socket_fd,"Salir puja Actual\n");
 		  }else{
@@ -142,6 +143,11 @@ int main(int argc, char *argv[]) {
 		  }
 		  read_bytes = socket.Recv(socket_fd,nueva_puja,MESSAGE_SIZE);
 		  cout<<nueva_puja;
+		  //COMPROBAR SI HAY GANADOOR (Hay que esperar a que empiece nueva puja Y si soy ganador transmitir datos)
+		  if("Ganador de la puja 4\n" == nueva_puja){
+			//REVISAR GUARDA!!!!!!!!!!
+			read_bytes = socket.Recv(socket_fd,nueva_puja,MESSAGE_SIZE); //
+		  }
 		}
 		
 		
