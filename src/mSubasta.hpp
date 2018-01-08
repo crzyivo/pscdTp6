@@ -37,6 +37,8 @@ public:
 	~monitorSubasta();
 	//Inicializa una nueva subasta de tiempoValla 
 	bool iniciarNuevaSubasta(int tiempoValla);
+	//Devuelve el tiempo que se subastara
+	int tiempoSubas();
 	//devuelve el precio inicial marcado
 	int comenzarSubasta();
 	//reactualiza la proxima minima puja que se aceptara

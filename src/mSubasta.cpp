@@ -17,6 +17,7 @@ monitorSubasta::~monitorSubasta(){
 bool monitorSubasta::iniciarNuevaSubasta(int tiempoValla){
 	unique_lock<mutex> lck(this->exclusionDatos);
 	if(!this->fin_Subastas && !this->aceptandoPujas){
+		this->TiempoAnuncio = tiempoValla;
 		this->precioRequerido = 70;
 		this->pujadorMasAlto = -1; //-1 = no hay pujador
 		this->posibleGanador = -1;
@@ -29,6 +30,13 @@ bool monitorSubasta::iniciarNuevaSubasta(int tiempoValla){
 	}
 }
 
+int monitorSubasta::tiempoSubas(){
+	unique_lock<mutex> lck(this->exclusionDatos);
+	if(this->aceptandoPujas){
+		return this->TiempoAnuncio;
+	}
+	return -1;
+}
 //devuelve el precio inicial marcado de manera que todos los procesos
 // comiencen la subasta al mismo tiempo
 int monitorSubasta::comenzarSubasta(){

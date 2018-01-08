@@ -49,7 +49,7 @@ void subastaCliente(Socket *subasta, int cliente){
 		//esperar a que se dé la condición de iniciar subasta
 		int precioInicial = mSubas.comenzarSubasta();	//Bloqueante. devuelve precio de salida de subasta
 		string mensajeIn = "";	//Mensajes desde cliente
-		string mensajeOut = "Comienza la subasta en " + to_string(precioInicial) + "\n"; //mensajes para cliente
+		string mensajeOut = "Comienza la subasta en " + to_string(precioInicial) + " para un tiempo " + to_string(mSubas.tiempoSubas()) +"\n"; //mensajes para cliente
 		bool seguirPuja = true;	//true = Cliente esta interesado en observar constantemente el estado de la subasta actual
 		//Bucle de subasta
 		//Cada iteracion corresponde al envio del precio actual, recibir y tratar mensajes de pujadores
