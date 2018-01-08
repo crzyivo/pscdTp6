@@ -5,6 +5,9 @@
 #define Pasa "Paso\n"
 #define SaltarPujas "Salir puja Actual\n"
 #define SalirSubasta "Salir de subasta\n"
+#define CoeficienteTiempo 1.25
+#define incrementoPuja 10
+
 #include <iostream>
 #include <mutex>
 #include <condition_variable>
@@ -24,12 +27,16 @@ private:
 	int pujaMinima;	//Siguiente oferta
 	int numPujas;	//Numero de pujas recibidas en el tiempo T
 	int numPujasSend;	//Numero de pujas recibidas en el tiempo T-1
+	bool aceptandoPujas;
 	bool fin_Subastas;	//True si y solo si no salen mas subastas 
-	mutex exclusion;        
-	condition_variable cv;	
+	mutex exclusionDatos;        
+	condition_variable envioPujas;	
+	condition_variable comenzarS;
 public:
 	monitorSubasta();
 	~monitorSubasta();
+	//Inicializa una nueva subasta de tiempoValla 
+	bool iniciarNuevaSubasta(int tiempoValla);
 	//devuelve el precio inicial marcado
 	int comenzarSubasta();
 	//reactualiza la proxima minima puja que se aceptara
@@ -47,6 +54,8 @@ public:
 	void enviarPuja();
 	//devuelve true si y solo si se pueden conectar clientes
 	bool SalonAbierto();
+	//True si y solo si hay una subasta en curso
+	bool SubastaEnCurso();
 	//Cierra todas las posibles subastas nuevas
 	bool CerrarSalon();
 	//Despierta el proceso para que pueda cerrar el socket

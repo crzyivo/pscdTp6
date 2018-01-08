@@ -1,4 +1,5 @@
 #include <iostream>
+#include <cstdlib>
 #include <string>
 #include <list>
 #include <thread>
@@ -20,15 +21,21 @@
 monitorSubasta mSubas;
 const int maxNumCLientes = 35;
 const int tiempoEntrePujas = 3000; //Tiempo que ha de esperar a que los interesados contesten
-
+const int MAX_TIEMPO_VALLA = 30;
+const int MIN_TIEMPO_VALLA = 2;
 int puertoSubasta = 32005;
 
 void controlSubasta(){
+	srand(time(NULL));
 	while(mSubas.SalonAbierto()){
-		cerr << "\033[31m Esperar \033[0m\n";
-		this_thread :: sleep_for(chrono :: milliseconds(tiempoEntrePujas));
-		mSubas.enviarPuja();
-		cerr << "\033[32m Todos Avisados \033[0m\n";
+		this_thread :: sleep_for(chrono :: milliseconds(tiempoEntrePujas*4));
+		mSubas.iniciarNuevaSubasta(rand()%MAX_TIEMPO_VALLA+MIN_TIEMPO_VALLA); 
+		while(mSubas.SubastaEnCurso()){
+			cerr << "\033[31m Esperar \033[0m\n";
+			this_thread :: sleep_for(chrono :: milliseconds(tiempoEntrePujas));
+			mSubas.enviarPuja();
+			cerr << "\033[32m Todos Avisados \033[0m\n";
+		}
 	}
 }
 
@@ -46,7 +53,7 @@ void subastaCliente(Socket *subasta, int cliente){
 		bool seguirPuja = true;	//true = Cliente esta interesado en observar constantemente el estado de la subasta actual
 		//Bucle de subasta
 		//Cada iteracion corresponde al envio del precio actual, recibir y tratar mensajes de pujadores
-		while(seguirPuja){
+		while(seguirPuja && mSubas.SubastaEnCurso()){
 			cout << mensajeOut;
 			subasta->Send(cliente, mensajeOut);
 			subasta->Recv(cliente, mensajeIn, maxMensaje);
@@ -65,10 +72,12 @@ void subastaCliente(Socket *subasta, int cliente){
 				switch(numPujadores = mSubas.nPujas()){	//Bloqueante. Devuelve nº de pujadores interesados
 				case 0://Nadie ha pujado
 					if(mSubas.SubastaAceptada()){
-						mensajeOut = "Ganador de la puja" + to_string(mSubas.PujadorActual()) + "\n";
+						mensajeOut = "Ganador de la puja " + to_string(mSubas.PujadorActual()) + "\n";
+						cout << "Hay ganador\n";
 					}else{
 						mensajeOut = "Minimo no alcanzado\n";
 					}
+					subasta->Send(cliente, mensajeOut);
 					seguirPuja = false;
 					break;
 				case 1://Solo hay una puja mas alta

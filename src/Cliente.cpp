@@ -143,10 +143,18 @@ int main(int argc, char *argv[]) {
 		  }
 		  read_bytes = socket.Recv(socket_fd,nueva_puja,MESSAGE_SIZE);
 		  cout<<nueva_puja;
-		  //COMPROBAR SI HAY GANADOOR (Hay que esperar a que empiece nueva puja Y si soy ganador transmitir datos)
-		  if("Ganador de la puja 4\n" == nueva_puja){
+		 //TRATAR MENSAJES DE ENTRADA DE LA SUBASTA
+		 //Si hay ganador (Si soy yo o no)
+		 //Si no hay ganador
+		 //Si he salido de la puja
+		 //Si he salido de la subasta
+		  if("Ganador de la puja 4\n" == nueva_puja || "Minimo no alcanzado\n" == nueva_puja || "Saliendo de subasta actual, esperando a que termine\n" == nueva_puja ){
 			//REVISAR GUARDA!!!!!!!!!!
-			read_bytes = socket.Recv(socket_fd,nueva_puja,MESSAGE_SIZE); //
+			cout << "Estoy esperando nueva subasta\n";
+			read_bytes = socket.Recv(socket_fd,nueva_puja,MESSAGE_SIZE); 
+			if(read_bytes > 0){
+				cout << nueva_puja;
+			}
 		  }
 		}
 		
