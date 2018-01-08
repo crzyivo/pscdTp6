@@ -17,36 +17,50 @@
  *  "Salir puja Actual"
  *  "Salir de subasta"
  **********************/ 
-const int maxNumCLientes = 35;
 monitorSubasta mSubas;
+const int maxNumCLientes = 35;
+const int tiempoEntrePujas = 3000; //Tiempo que ha de esperar a que los interesados contesten
 
 int puertoSubasta = 32005;
+
+void controlSubasta(){
+	while(mSubas.SalonAbierto()){
+		this_thread :: sleep_for(chrono :: milliseconds(tiempoEntrePujas));
+		mSubas.enviarPuja();
+	}
+
+}
 
 
 void subastaCliente(Socket *subasta, int cliente){
 	bool enSubasta = true;
 	const int maxMensaje = 1000;
+	//Bucle de subastas
+	//Cada iteración completa comprende desde el comienzo hasta su finalizacion de una subasta
 	while(enSubasta && !mSubas.CerrarSalon()){
 		//esperar a que se dé la condición de iniciar subasta
-		int precioInicial = mSubas.comenzarSubasta();
-		string mensajeIn = "";
-		string mensajeOut = "Comienza la subasta en " + to_string(precioInicial) + "\n";
-		bool seguirPuja = true;
+		int precioInicial = mSubas.comenzarSubasta();	//Bloqueante. devuelve precio de salida de subasta
+		string mensajeIn = "";	//Mensajes desde cliente
+		string mensajeOut = "Comienza la subasta en " + to_string(precioInicial) + "\n"; //mensajes para cliente
+		bool seguirPuja = true;	//true = Cliente esta interesado en observar constantemente el estado de la subasta actual
+		//Bucle de subasta
+		//Cada iteracion corresponde al envio del precio actual, recibir y tratar mensajes de pujadores
 		while(seguirPuja){
 			subasta->Send(cliente, mensajeOut);
-			subasta->Recv(cliente, mensajeIn,maxMensaje);
+			subasta->Recv(cliente, mensajeIn, maxMensaje);
+			
 			//tratar mensajeIn
-			if(mensajeIn == SaltarPujas){
+			if(mensajeIn == SaltarPujas){	//pujador no interesado en seguir subasta actual
 				seguirPuja = false;
 				subasta->Send(cliente, "Saliendo de subasta actual, esperando a que termine\n");
-    		}else if(mensajeIn == SalirSubasta){
+    		}else if(mensajeIn == SalirSubasta){	//pujador no interesado en ninguna subasta
 				seguirPuja = false;
 				enSubasta = false;
 				subasta->Send(cliente, "Saliendo del salon de subastas. Hasta pronto\n");
-    		}else{
+    		}else{ //Cliente mantiene interes en la puja (haya aceptado o pasado)
 				mSubas.pujar(mensajeIn, cliente);
 				int numPujadores;
-				switch(numPujadores = mSubas.nPujas()){
+				switch(numPujadores = mSubas.nPujas()){	//Bloqueante. Devuelve nº de pujadores interesados
 				case 0://Nadie ha pujado
 					if(mSubas.SubastaAceptada()){
 						mensajeOut = "Ganador de la puja" + to_string(mSubas.PujadorActual()) + "\n";

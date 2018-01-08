@@ -15,6 +15,7 @@ using namespace std;
 
 class monitorSubasta{
 private:
+	int precioRequerido;
 	int pujadorMasAlto;
 	int pujaMasAlta;
 	int pujaMinima;
@@ -31,6 +32,8 @@ public:
 	//reactualiza la proxima minima puja que se aceptara
 	//devuelve true si y solo si la puja ha sido superada
 	void pujar(string mensaje, int cliente);
+	//Devuelve true si y solo si, se ha llegado al minino pedido
+	bool SubastaAceptada();
 	//Devuelve el cardinal de pujadores de la ronda actual
 	int nPujas();
 	//devuelve la acual puja
@@ -39,8 +42,6 @@ public:
 	int PujadorActual();
 	//Despierta a los procesos que estan esperando a enviar una puja
 	void enviarPuja();
-	//Devuelve true si y solo si hay una subasta por encima del precio minimo
-	bool SubastaAceptada();
 	//devuelve true si y solo si se pueden conectar clientes
 	bool SalonAbierto();
 	//Cierra todas las posibles subastas nuevas

@@ -13,6 +13,7 @@ monitorSubasta::~monitorSubasta(){
 // comiencen la subasta al mismo tiempo
 int monitorSubasta::comenzarSubasta(){
 	unique_lock<mutex> lck(this->exclusion);
+	this->cv.wait(lck);
 	return pujaMinima;
 }
 //reactualiza la proxima minima puja que se aceptara
@@ -34,6 +35,10 @@ void monitorSubasta::pujar(string mensaje, int cliente){
 			
 		}
 	}
+}
+
+bool monitorSubasta::SubastaAceptada(){
+	return this->pujaMasAlta >= this->precioRequerido;
 }
 //Devuelve el cardinal de pujadores de la ronda actual
 int monitorSubasta::nPujas(){
@@ -65,6 +70,7 @@ bool monitorSubasta::SalonAbierto(){
 //Cierra todas las posibles subastas nuevas
 bool monitorSubasta::CerrarSalon(){
 	unique_lock<mutex> lck(this->exclusion);
+	this->fin_Subastas = true;
 }
 //Despierta el proceso para que pueda cerrar el socket
 void monitorSubasta::finSubasta(){
