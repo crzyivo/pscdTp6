@@ -17,16 +17,35 @@ using namespace std;
 
 const int MESSAGE_SIZE = 4001; //mensajes de no más 4000 caracteres
 
-int main() {
+int main(int argc, char *argv[]) {
     srand(time(0));
     const string MENS_FIN("END OF SERVICE");
     // Dirección y número donde escucha el proceso servidor
-    string SERVER_ADDRESS;
-    string SERVER_PORT;
-    cout<<"Introduce la direccion servidor: \n";
-    getline(cin,SERVER_ADDRESS);
-    cout<<"Introduce el numero de puerto: \n";
-    getline(cin,SERVER_PORT);
+    string SERVER_ADDRESS = "localhost";
+    string SERVER_PORT = "32005";
+    	string dir;
+		if(argc >1){	//Inicializa con Parametros
+		for (int i = 1; i< argc; i++){
+			if(*argv[i]++ == '-'){
+				if(*argv[i] == 'p'){		//numero de vueltas
+					if(*++argv[i] == '\0'){i++;/*saltar espacio en blanco*/}
+					 SERVER_PORT = argv[i];
+				}else if(*argv[i] == 'd'){	//mnumero surtidores
+					if(*++argv[i] == '\0'){i++; /*saltar espacio en blanco*/}
+					SERVER_ADDRESS = argv[i];
+				}else{
+					cout << "Uso: [-p<puerto>] [-d<direccion>]\n";
+					cout << "\t-p<puerto>: puerto del servidor\n";
+					cout << "\t-d<direccion>: direccion servidor\n";
+					exit(1);
+				}
+			}
+		}
+	}
+    // cout<<"Introduce la direccion servidor: \n";
+    // getline(cin,SERVER_ADDRESS);
+    // cout<<"Introduce el numero de puerto: \n";
+    // getline(cin,SERVER_PORT);
     string imagenes[7]={
         "http://i.imgur.com/eTuCPxM.jpg",
         "http://i.imgur.com/evzIQVF.jpg",
@@ -93,7 +112,7 @@ int main() {
 //             cout << "Mensaje enviado: '" << mensaje << "'" << endl;
 //             cout << "Peticion: " << buffer << endl;
 //         }
-        cout<<"He conectado"<<endl;
+        cout<<"He conectado\n";
         string inicio_puja="";
         string puja = "";
         string nueva_puja="";
@@ -113,9 +132,8 @@ int main() {
           if(puja == "p"){
               read_bytes = socket.Send(socket_fd,"Paso\n");
           }else if(puja == "a"){
-              read_bytes = socket.Send(socket_fd,"Acepto");
-          }else if(stoi(puja) > 0){
-              read_bytes = socket.Send(socket_fd,"Subo "+puja+"\n");
+              read_bytes = socket.Send(socket_fd,"Acepto\n");
+        
           }else{
               cout<<"No te he entendido"<<endl;
           }

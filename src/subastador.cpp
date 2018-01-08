@@ -25,10 +25,11 @@ int puertoSubasta = 32005;
 
 void controlSubasta(){
 	while(mSubas.SalonAbierto()){
+		cerr << "\033[31m Esperar \033[0m\n";
 		this_thread :: sleep_for(chrono :: milliseconds(tiempoEntrePujas));
 		mSubas.enviarPuja();
+		cerr << "\033[32m Todos Avisados \033[0m\n";
 	}
-
 }
 
 
@@ -37,7 +38,7 @@ void subastaCliente(Socket *subasta, int cliente){
 	const int maxMensaje = 1000;
 	//Bucle de subastas
 	//Cada iteración completa comprende desde el comienzo hasta su finalizacion de una subasta
-	while(enSubasta && !mSubas.CerrarSalon()){
+	while(enSubasta && mSubas.SalonAbierto()){
 		//esperar a que se dé la condición de iniciar subasta
 		int precioInicial = mSubas.comenzarSubasta();	//Bloqueante. devuelve precio de salida de subasta
 		string mensajeIn = "";	//Mensajes desde cliente
@@ -46,9 +47,10 @@ void subastaCliente(Socket *subasta, int cliente){
 		//Bucle de subasta
 		//Cada iteracion corresponde al envio del precio actual, recibir y tratar mensajes de pujadores
 		while(seguirPuja){
+			cout << mensajeOut;
 			subasta->Send(cliente, mensajeOut);
 			subasta->Recv(cliente, mensajeIn, maxMensaje);
-			
+			cout << mensajeIn;
 			//tratar mensajeIn
 			if(mensajeIn == SaltarPujas){	//pujador no interesado en seguir subasta actual
 				seguirPuja = false;
@@ -67,13 +69,14 @@ void subastaCliente(Socket *subasta, int cliente){
 					}else{
 						mensajeOut = "Minimo no alcanzado\n";
 					}
+					seguirPuja = false;
 					break;
 				case 1://Solo hay una puja mas alta
 					mensajeOut = "Pujador " + to_string(mSubas.PujadorActual()) + " hizo la max oferta. Quien ofrece: " + to_string(mSubas.pujaActual()) + "\n";
 					break;
 				default:// >1 pujador
 					mensajeOut = "Hay " + to_string(numPujadores) + ". Quien ofrece: " +to_string(mSubas.pujaActual()+10) + "\n";
-				}
+				}	
 			}
 		}
 	}
@@ -119,17 +122,21 @@ int main(int argc, char * argv[]){
         subasta.Close(sockSubasta);
         exit(1);
         }
-
+		thread com(&controlSubasta);
+		com.detach();
 	while(mSubas.SalonAbierto()){
 		//Abrir Salon
 		int cliente = subasta.Accept();
+		cout << "Cliente con fd " + to_string(cliente) + " ha entrado en subasta conectado\n";
 		thread th(&subastaCliente, &subasta,cliente);
 		th.detach();
 		// esperar a que puedan entrar más clientes a Subasta
 
 	}
+	cout << "bye bye\n";
 	mSubas.finSubasta();
 	subasta.Close(sockSubasta);
+
 	
 	return 0;
 }

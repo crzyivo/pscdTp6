@@ -15,15 +15,18 @@ using namespace std;
 
 class monitorSubasta{
 private:
-	int precioRequerido;
-	int pujadorMasAlto;
-	int pujaMasAlta;
-	int pujaMinima;
-	int numPujas;
-	int numPujasSend;
-	bool fin_Subastas;
+	int TiempoAnuncio; //Tiempo en subasta de una valla
+
+	int precioRequerido;	//Precio ha alcanzar
+	int pujadorMasAlto;	//Cliente que contiene la puja mas alta en tiempo T (no implica que sea unico)
+	int posibleGanador; //Cliente con mayor puja en el tiempo T-1 (no implica que sea unico)
+	int pujaMasAlta;	//Puja mas alta recibida
+	int pujaMinima;	//Siguiente oferta
+	int numPujas;	//Numero de pujas recibidas en el tiempo T
+	int numPujasSend;	//Numero de pujas recibidas en el tiempo T-1
+	bool fin_Subastas;	//True si y solo si no salen mas subastas 
 	mutex exclusion;        
-	condition_variable_any cv;	
+	condition_variable cv;	
 public:
 	monitorSubasta();
 	~monitorSubasta();
