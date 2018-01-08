@@ -111,16 +111,16 @@ int main() {
         while(true){
           cin >> puja;
           if(puja == "p"){
-              read_bytes = socket.Send(socket_fd,"Paso");
+              read_bytes = socket.Send(socket_fd,"Paso\n");
           }else if(puja == "a"){
               read_bytes = socket.Send(socket_fd,"Acepto");
           }else if(stoi(puja) > 0){
-              read_bytes = socket.Send(socket_fd,"Subo "+puja);
+              read_bytes = socket.Send(socket_fd,"Subo "+puja+"\n");
           }else{
               cout<<"No te he entendido"<<endl;
           }
           read_bytes = socket.Recv(socket_fd,nueva_puja,MESSAGE_SIZE);
-          cout<<"La puja actual es de: "+nueva_puja<<endl;
+          cout<<nueva_puja;
         }
         
         
