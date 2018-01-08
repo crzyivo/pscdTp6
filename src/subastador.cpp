@@ -48,10 +48,14 @@ void subastaCliente(Socket *subasta, int cliente){
 				int numPujadores;
 				switch(numPujadores = mSubas.nPujas()){
 				case 0://Nadie ha pujado
-					mensajeOut = "Ganador de la puja\n";
+					if(mSubas.SubastaAceptada()){
+						mensajeOut = "Ganador de la puja" + to_string(mSubas.PujadorActual()) + "\n";
+					}else{
+						mensajeOut = "Minimo no alcanzado\n";
+					}
 					break;
 				case 1://Solo hay una puja mas alta
-					mensajeOut = "Cliente X";
+					mensajeOut = "Pujador " + to_string(mSubas.PujadorActual()) + " hizo la max oferta. Quien ofrece: " + to_string(mSubas.pujaActual()) + "\n";
 					break;
 				default:// >1 pujador
 					mensajeOut = "Hay " + to_string(numPujadores) + ". Quien ofrece: " +to_string(mSubas.pujaActual()+10) + "\n";

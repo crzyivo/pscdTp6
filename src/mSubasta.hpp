@@ -39,6 +39,8 @@ public:
 	int PujadorActual();
 	//Despierta a los procesos que estan esperando a enviar una puja
 	void enviarPuja();
+	//Devuelve true si y solo si hay una subasta por encima del precio minimo
+	bool SubastaAceptada();
 	//devuelve true si y solo si se pueden conectar clientes
 	bool SalonAbierto();
 	//Cierra todas las posibles subastas nuevas
