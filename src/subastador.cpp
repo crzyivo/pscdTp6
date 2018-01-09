@@ -3,6 +3,7 @@
 #include <string>
 #include <list>
 #include <thread>
+#include <atomic>
 #include "Socket.hpp"
 #include "mSubasta.hpp"
 /***********************
@@ -28,9 +29,10 @@ int puertoSubasta = 32005;
 void controlSubasta(){
 	srand(time(NULL));
 	while(mSubas.SalonAbierto()){
+		//NO EMPEZAR CON 0 Clientes
 		this_thread :: sleep_for(chrono :: milliseconds(tiempoEntrePujas*10));
 		mSubas.iniciarNuevaSubasta(rand()%MAX_TIEMPO_VALLA+MIN_TIEMPO_VALLA); 
-		while(mSubas.SubastaEnCurso()){
+		while(mSubas.numPujadores() > 0 && mSubas.SubastaEnCurso()){
 			cerr << "\033[31m Esperar \033[0m\n";
 			this_thread :: sleep_for(chrono :: milliseconds(tiempoEntrePujas));
 			mSubas.enviarPuja();

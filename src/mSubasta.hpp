@@ -5,8 +5,9 @@
 #define Pasa "Paso\n"
 #define SaltarPujas "Salir puja Actual\n"
 #define SalirSubasta "Salir de subasta\n"
+#define CuotaMercado 43
 #define CoeficienteTiempo 1.25
-#define incrementoPuja 10
+#define incrementoPuja 5
 
 #include <iostream>
 #include <mutex>
@@ -19,7 +20,7 @@ using namespace std;
 class monitorSubasta{
 private:
 	int TiempoAnuncio; //Tiempo en subasta de una valla
-
+	int pujadoresObservando;
 	int precioRequerido;	//Precio ha alcanzar
 	int pujadorMasAlto;	//Cliente que contiene la puja mas alta en tiempo T (no implica que sea unico)
 	int posibleGanador; //Cliente con mayor puja en el tiempo T-1 (no implica que sea unico)
@@ -27,6 +28,7 @@ private:
 	int pujaMinima;	//Siguiente oferta
 	int numPujas;	//Numero de pujas recibidas en el tiempo T
 	int numPujasSend;	//Numero de pujas recibidas en el tiempo T-1
+	bool primero;		//Primero que se recibe puja (gana ante empate)
 	bool aceptandoPujas;
 	bool fin_Subastas;	//True si y solo si no salen mas subastas 
 	mutex exclusionDatos;        
@@ -62,6 +64,11 @@ public:
 	bool CerrarSalon();
 	//Despierta el proceso para que pueda cerrar el socket
 	void finSubasta();
+
+	void anyadirPujador();
+	void quitarPujador();
+	int numPujadores();
+
 
 };
 

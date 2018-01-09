@@ -1,6 +1,7 @@
 #include "mSubasta.hpp"
 
 monitorSubasta::monitorSubasta(){
+	this->pujadoresObservando = 0;
 	this->pujadorMasAlto = -1; //-1 = no hay pujador
 	this->posibleGanador = -1;
 	this->pujaMasAlta = 0;
@@ -9,19 +10,32 @@ monitorSubasta::monitorSubasta(){
 	this->numPujasSend = 0;
 	this->aceptandoPujas = false;
 	this->fin_Subastas = false;
+	this->primero = true;
 }
 monitorSubasta::~monitorSubasta(){
 	
+}
+void monitorSubasta::anyadirPujador(){
+	unique_lock<mutex> lck(this->exclusionDatos);
+	this->pujadoresObservando++;
+}
+void monitorSubasta::quitarPujador(){
+	unique_lock<mutex> lck(this->exclusionDatos);
+	this->pujadoresObservando--;
+}
+int monitorSubasta::numPujadores(){
+	unique_lock<mutex> lck(this->exclusionDatos);
+	return this->pujadoresObservando;
 }
 
 bool monitorSubasta::iniciarNuevaSubasta(int tiempoValla){
 	unique_lock<mutex> lck(this->exclusionDatos);
 	if(!this->fin_Subastas && !this->aceptandoPujas){
 		this->TiempoAnuncio = tiempoValla;
-		this->precioRequerido = 70;
 		this->pujadorMasAlto = -1; //-1 = no hay pujador
 		this->posibleGanador = -1;
 		this->pujaMasAlta = tiempoValla*CoeficienteTiempo;
+		this->precioRequerido = this->pujaMasAlta+CuotaMercado;
 		this->pujaMinima = this->pujaMasAlta;
 		this->numPujas = 0;
 		this->numPujasSend = 0;
@@ -49,7 +63,10 @@ void monitorSubasta::pujar(string mensaje, int cliente){
 	unique_lock<mutex> lck(this->exclusionDatos);
 	if(mensaje == Accepto){	
 		this->numPujas++;
-		this->pujadorMasAlto = cliente;
+		if(this->primero) {
+			this->pujadorMasAlto = cliente;
+			this->primero = false;
+		}
 	}
 }
 
@@ -86,6 +103,7 @@ void monitorSubasta::enviarPuja(){
 		this->aceptandoPujas = false;
 	}
 	this->posibleGanador = this->pujadorMasAlto;
+	this->primero = true;
 	this->envioPujas.notify_all();
 }
 //devuelve true si y solo si se pueden conectar clientes
