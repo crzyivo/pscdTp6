@@ -44,6 +44,8 @@ public:
 	void desencolar(Anuncio& anun);
 	//Devuelve el número de elementos que hay en la cola
 	int numEnEspera();
+	//Devuelve cierto si y solo si hay elementos esperando la cola
+	bool hayAnuncios();
 	//Asocia a los parámetros los valores que tienen en el momento de consultarse
 	void informacion (int& imgMost, int& tpoMost, int& tpoCont);
 };

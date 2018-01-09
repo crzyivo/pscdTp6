@@ -29,17 +29,13 @@ const int NUM_VALLAS = 2;               //Número de vallas que se ofertan
 
 void mostrarImagen (Valla v, const int numValla) {
     int numImagen = 1;
-    bool hayAnuncios = gestor.numEnEspera() > 0;   //Cierto si y solo si hay anuncios por mostrar
     char nombreVentana[MAX_LONG_NOMBRE_IMG];    //Nombre de la ventana que representa la valla
     char numV = (char) numValla + '0';      //Pasa el número de valla a caracter
     
     strcpy(nombreVentana, "Valla ");
     strcat(nombreVentana, numV);
     
-    while (!hayAnuncios) {
-        hayAnuncios = gestor.numEnEspera() > 0;
-    }
-    while (hayAnuncios) {
+    while ( gestor.hayAnuncios() ) {
         Anuncio anuncio;        //Variable que nos permite guardar el anuncio
         char numImg = (char) numImagen + '0';   //Pasa el número de imagen a caracter
         char URL[MAX_LONG_URL];                 //Guarda URL que se ha de descargar

@@ -19,6 +19,7 @@ void MonitorValla::encolar(const Anuncio a) {
 
     esperando.push(a);
     tiempoContratado += a.infoTiempo();
+    cv.notify_one();
 }
 
 //Extrae el primer elemento de la cola esperando y asocia
@@ -37,6 +38,16 @@ int MonitorValla::numEnEspera() {
     unique_lock<recursive_mutex> lck(mtx);
 
     return esperando.size();
+}
+
+//Devuelve cierto si y solo si hay elementos esperando la cola
+bool MonitorValla::hayAnuncios() {
+    unique_lock<recursive_mutex> lck(mtx);
+    
+    while (esperando.size() < 1) {
+        cv.wait(lck);
+    }
+    return true;
 }
 
 //Asocia a los parámetros los valores que tienen en el momento de consultarse
