@@ -50,12 +50,13 @@ int MonitorValla::numEnEspera() {
 }
 
 //Asocia a los parámetros los valores que tienen en el momento de consultarse
-void  MonitorValla::informacion (int& imgMost, int& tpoMost, int& tpoCont) {
+void  MonitorValla::informacion (int& imgMost, int& tpoMost, int& tpoCont, int& nPet) {
     unique_lock<recursive_mutex> lck(mtx);
    
     imgMost = imagenesMostradas;
     tpoMost = tiempoMostrado;
     tpoCont = tiempoContratado;
+    nPet = esperando.size();
 }
 
 //FinPeticiones = true

@@ -63,7 +63,7 @@ void mostrarImagen (Valla v, const int numValla, MonitorValla gestor) {
     }
 }
 
-int main() {
+void runGestorValla(MonitorValla gestor) {
     // Tamaños de ventana para las vallas publicitarias
     const int VALLA_WIDTH = 800;
     const int VALLA_HEIGHT = 800;
@@ -73,7 +73,7 @@ int main() {
 
     for (int i = 0; i < NUM_VALLAS; i++) {
         vallasDisponibles[i](VALLA_HEIGHT, VALLA_WIDTH);
-        mostrar[i] = thread (&mostrarImagen, vallasDisponibles[i], i+1)
+        mostrar[i] = thread (&mostrarImagen, vallasDisponibles[i], i+1, gestor)
     }
 
     for (int i = 0; i < NUM_VALLAS; i++) {

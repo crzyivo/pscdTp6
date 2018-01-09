@@ -47,7 +47,7 @@ public:
 	//Devuelve el número de elementos que hay en la cola
 	int numEnEspera();
 	//Asocia a los parámetros los valores que tienen en el momento de consultarse
-	void informacion (int& imgMost, int& tpoMost, int& tpoCont);
+	void informacion (int& imgMost, int& tpoMost, int& tpoCont, int& nPet);
 	//FinPeticiones = true
 	void finServicio();
 };
