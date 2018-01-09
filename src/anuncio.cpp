@@ -17,10 +17,10 @@ Anuncio::Anuncio(char nuevaURL[], int nuevoTiempo) {
 //Destructor de anuncio
 Anuncio::~Anuncio() {
 }
-//Sobrecargar operador = para poder asignar un anuncio a otro
-Anuncio& Anuncio::operator=(const Anuncio& a) {
-    return *(new Anuncio(a.URL, a.tiempo));
-}
+// //Sobrecargar operador = para poder asignar un anuncio a otro
+// Anuncio& Anuncio::operator=(const Anuncio& a) {
+//     return *(new Anuncio(a.URL, a.tiempo));
+// }
 //devuelve el tiempo que se va a mostrar el anuncio 
 int Anuncio::infoTiempo() {
     return tiempo;

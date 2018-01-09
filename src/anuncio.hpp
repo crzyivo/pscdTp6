@@ -11,7 +11,7 @@
  */
 #ifndef VALLA_HPP
 #define VALLA_HPP
-#define MAX_LONG_URL 500;	//Máxima longitud permitida para la URL
+#define MAX_LONG_URL 500	//Máxima longitud permitida para la URL
 
 #include <iostream>
 #include <mutex>
@@ -36,8 +36,8 @@ public:
 	Anuncio(char nuevaURL[], int nuevoTiempo);
 	//Destructor de anuncio
 	~Anuncio();
-	//Sobrecargar operador = para poder asignar un anuncio a otro
-	Anuncio& operator=(const Anuncio& a);
+// 	//Sobrecargar operador = para poder asignar un anuncio a otro
+// 	Anuncio& operator=(const Anuncio& a);
 	//devuelve el tiempo que se va a mostrar el anuncio "publi"
 	int infoTiempo();
 	//asocia a URL la direccion que tiene el anuncio "publi"

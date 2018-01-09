@@ -1,5 +1,5 @@
 
-all: subastador cliente gestor
+all: subastador gestor
 
 #Subastador
 subastador: subastador.cpp Socket.o mSubasta.o
@@ -24,7 +24,7 @@ gestor: gestor.o anuncio.o valla.o mValla.o imageDownloader.o
 gestor.o:gestorValla.cpp anuncio.o valla.o mValla.o imageDownloader.o
 	g++ -c -I. -I/usr/local/include -O2 -std=c++11 -fmax-errors=1 -Werror gestorValla.cpp anuncio.o valla.o mValla.o imageDownloader.o
 
-anuncio.o: anuncio.hpp anuncio.cpp
+anuncio.o: anuncio.hpp anuncio.cpp ImageDownloader.hpp CImg.h
 	g++ -c -std=c++11 anuncio.cpp
 
 valla.o: valla.cpp anuncio.o
