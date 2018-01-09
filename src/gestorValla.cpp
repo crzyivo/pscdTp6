@@ -23,7 +23,7 @@ using namespace std;
 using namespace cimg_library;
 
 const int MAX_LONG_NOMBRE_IMG = 100;    //Longitud máxima del nombre de una imagen
-//MonitorValla gestor();                  //Monitor que asegura desencolar en exclusión mutua
+MonitorValla gestor();                  //Monitor que asegura desencolar en exclusión mutua
 const int NUM_VALLAS = 2;               //Número de vallas que se ofertan
 
 void mostrarImagen (Valla v, const int numValla, MonitorValla gestor) {
