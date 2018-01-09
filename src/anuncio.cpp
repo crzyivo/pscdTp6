@@ -5,6 +5,8 @@
  */
 
 #include "anuncio.hpp"
+
+
 //Constructor de anuncio. El tiempo debe expresarse en segundos
 Anuncio::Anuncio(char nuevaURL[], int nuevoTiempo) {
     if (strlen(nuevaURL) < MAX_LONG_URL) {
@@ -17,13 +19,10 @@ Anuncio::Anuncio(char nuevaURL[], int nuevoTiempo) {
 //Destructor de anuncio
 Anuncio::~Anuncio() {
 }
-// //Sobrecargar operador = para poder asignar un anuncio a otro
-// Anuncio& Anuncio::operator=(const Anuncio& a) {
-//     return *(new Anuncio(a.URL, a.tiempo));
-// }
+
 //devuelve el tiempo que se va a mostrar el anuncio 
 int Anuncio::infoTiempo() {
-    return tiempo;
+    return this->tiempo;
 }
 //asocia a URL la direccion que tiene el anuncio
 void Anuncio::infoURL(char obtenerURL[]){

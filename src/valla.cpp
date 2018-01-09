@@ -6,10 +6,10 @@
 
 #include "valla.hpp"
 
+
 Valla::Valla(const int alto, const int ancho) {
     altura = alto;
     anchura = ancho;
-    mostrado = Anuncio();
 }
 Valla::~Valla() {
 }

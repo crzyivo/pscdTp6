@@ -39,7 +39,7 @@ public:
 	MonitorValla();
 	~MonitorValla();
 	//Añade a como último elemento de la cola
-	void encolar(const Anuncio a);
+	void encolar(Anuncio& a);
 	//Extrae el primer elemento de la cola y lo asocia
 	//a anun el anuncio extraído. Devuelve cierto si y solo
 	//si ha desencolado el anuncio

@@ -5,17 +5,17 @@
  */
 
 #include "mValla.hpp"
-MonitorValla() {
+MonitorValla::MonitorValla() {
     tiempoContratado = 0;
     tiempoMostrado = 0;
     imagenesMostradas = 0;
     finPeticiones = false;
 }
-~MonitorValla() {
+MonitorValla::~MonitorValla() {
 }
 
 //Añade a en como último elemento de la cola esperando
-void MonitorValla::encolar(const Anuncio a) {
+void MonitorValla::encolar(Anuncio& a) {
     unique_lock<recursive_mutex> lck(mtx);
 
     esperando.push(a);

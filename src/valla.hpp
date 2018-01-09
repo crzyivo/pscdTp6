@@ -14,17 +14,14 @@
 #define VALLA_HPP
 
 #include <iostream>
-#include <mutex>
-#include <condition_variable>
-#include <assert.h>
 #include <string>
 #include "anuncio.hpp"
 
 using namespace std;
 
-const int MAX_LONG_URL = 500;
+//const int MAX_LONG_URL = 500;
 
-class Valla{
+class Valla {
 private:
 	Anuncio mostrado;		//Anuncio que se está mostrando en la valla
 	int altura;				//Altura de la ventana (valla publicitaria)
