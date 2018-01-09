@@ -27,8 +27,8 @@
 *.lib
 
 # Executables
-cliente
-subastador
 *.exe
 *.out
 *.app
+src/cliente
+src/subastador
