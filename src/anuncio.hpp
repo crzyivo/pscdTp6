@@ -36,7 +36,7 @@ public:
 	Anuncio(char nuevaURL[], int nuevoTiempo);
 	//Destructor de anuncio
 	~Anuncio();
-	//Sobrecargar operador = para poder igual un anuncio a otro
+	//Sobrecargar operador = para poder asignar un anuncio a otro
 	Anuncio& operator=(const Anuncio& a);
 	//devuelve el tiempo que se va a mostrar el anuncio "publi"
 	int infoTiempo();

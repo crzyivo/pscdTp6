@@ -20,7 +20,7 @@
  **********************/ 
 monitorSubasta mSubas;
 const int maxNumCLientes = 35;
-const int tiempoEntrePujas = 3000; //Tiempo que ha de esperar a que los interesados contesten
+const int tiempoEntrePujas = 2000; //Tiempo que ha de esperar a que los interesados contesten
 const int MAX_TIEMPO_VALLA = 30;
 const int MIN_TIEMPO_VALLA = 2;
 int puertoSubasta = 32005;
@@ -28,7 +28,7 @@ int puertoSubasta = 32005;
 void controlSubasta(){
 	srand(time(NULL));
 	while(mSubas.SalonAbierto()){
-		this_thread :: sleep_for(chrono :: milliseconds(tiempoEntrePujas*4));
+		this_thread :: sleep_for(chrono :: milliseconds(tiempoEntrePujas*10));
 		mSubas.iniciarNuevaSubasta(rand()%MAX_TIEMPO_VALLA+MIN_TIEMPO_VALLA); 
 		while(mSubas.SubastaEnCurso()){
 			cerr << "\033[31m Esperar \033[0m\n";
