@@ -138,8 +138,9 @@ int main(int argc, char *argv[]) {
 			break;//QUITAAAARR!!!!
 		  }else if(puja == "sp"){	
 			read_bytes = socket.Send(socket_fd,"Salir puja Actual\n");
-		  }else{
+		  }else{//Tratar mensajes no entendidos
 			  cout<<"No te he entendido"<<endl;
+			  read_bytes = socket.Send(socket_fd,"Paso\n");
 		  }
 		  read_bytes = socket.Recv(socket_fd,nueva_puja,MESSAGE_SIZE);
 		  cout<<nueva_puja;
