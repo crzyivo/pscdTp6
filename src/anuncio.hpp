@@ -11,6 +11,7 @@
  */
 #ifndef VALLA_HPP
 #define VALLA_HPP
+#define MAX_LONG_URL = 500;	//Máxima longitud permitida para la URL
 
 #include <iostream>
 #include <mutex>
@@ -24,7 +25,7 @@
 using namespace std;
 using namespace cimg_library;
 
-const int MAX_LONG_URL = 500;	//Máxima longitud permitida para la URL
+
 
 class Anuncio{
 private:
