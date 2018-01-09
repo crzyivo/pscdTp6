@@ -47,6 +47,7 @@ void subastaCliente(Socket *subasta, int cliente){
 	const int maxMensaje = 1000;
 	//Bucle de subastas
 	//Cada iteración completa comprende desde el comienzo hasta su finalizacion de una subasta
+	mSubas.anyadirPujador();
 	while(enSubasta && mSubas.SalonAbierto()){
 		//esperar a que se dé la condición de iniciar subasta
 		int precioInicial = mSubas.comenzarSubasta();	//Bloqueante. devuelve precio de salida de subasta
@@ -95,6 +96,7 @@ void subastaCliente(Socket *subasta, int cliente){
 	if(error < 0){
 		printf("error al desconectar cliente\n");
 	}
+	mSubas.quitarPujador();
 }
 
 int main(int argc, char * argv[]){
