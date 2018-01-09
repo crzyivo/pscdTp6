@@ -32,6 +32,7 @@ private:
 	int tiempoContratado;		//Tiempo (en segundos) que se ha contratado para mostrar publicidad
 	int tiempoMostrado;			//Tiempo total (en segundos) que se han mostrado anuncios
 	int imagenesMostradas;		//Número de imágenes que han sido mostradas
+	bool finPeticiones;			//Cierto si y solo si ya no se van a encolar más anuncios
 	recursive_mutex mtx;        
 	condition_variable_any cv;	
 public:
@@ -40,14 +41,15 @@ public:
 	//Añade a como último elemento de la cola
 	void encolar(const Anuncio a);
 	//Extrae el primer elemento de la cola y lo asocia
-	//a anun el anuncio extraído
-	void desencolar(Anuncio& anun);
+	//a anun el anuncio extraído. Devuelve cierto si y solo
+	//si ha desencolado el anuncio
+	bool obtenerAnuncio(Anuncio& anun);
 	//Devuelve el número de elementos que hay en la cola
 	int numEnEspera();
-	//Devuelve cierto si y solo si hay elementos esperando la cola
-	bool hayAnuncios();
 	//Asocia a los parámetros los valores que tienen en el momento de consultarse
 	void informacion (int& imgMost, int& tpoMost, int& tpoCont);
+	//FinPeticiones = true
+	void finServicio();
 };
 
 #endif 

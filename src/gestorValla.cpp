@@ -22,21 +22,21 @@
 using namespace std;
 using namespace cimg_library;
 
-const int MAX_LONG_URL = 500;           //Longitud máxima de la dirección URL
 const int MAX_LONG_NOMBRE_IMG = 100;    //Longitud máxima del nombre de una imagen
 MonitorValla gestor();                  //Monitor que asegura desencolar en exclusión mutua
 const int NUM_VALLAS = 2;               //Número de vallas que se ofertan
 
 void mostrarImagen (Valla v, const int numValla) {
-    int numImagen = 1;
+    int numImagen = 1;                      //Recuento de imágenes que ha mostrado este proceso
+    Anuncio anuncio;                        //Variable que nos permite guardar el anuncio
     char nombreVentana[MAX_LONG_NOMBRE_IMG];    //Nombre de la ventana que representa la valla
     char numV = (char) numValla + '0';      //Pasa el número de valla a caracter
     
     strcpy(nombreVentana, "Valla ");
     strcat(nombreVentana, numV);
     
-    while ( gestor.hayAnuncios() ) {
-        Anuncio anuncio;        //Variable que nos permite guardar el anuncio
+    while ( gestor.obtenerAnuncio(anuncio) ) {
+       
         char numImg = (char) numImagen + '0';   //Pasa el número de imagen a caracter
         char URL[MAX_LONG_URL];                 //Guarda URL que se ha de descargar
         char nombreImg[MAX_LONG_NOMBRE_IMG];    //Nombre que tendrá la imagen que se descargue
@@ -46,7 +46,6 @@ void mostrarImagen (Valla v, const int numValla) {
         strcat(nombreImg, numImg);
         strcat(nombreImg, ".jpg");              //nombreImg = IMG*numValla**numImg*.jpg
 
-        gestor.desencolar(anuncio);
         // Creamos el objeto para descargar imágenes
         ImageDownloader downloader;
         anuncio.infoURL(URL);
@@ -61,7 +60,6 @@ void mostrarImagen (Valla v, const int numValla) {
         // Mostrar imagen
 	    vallaConImg.wait(anuncio.infoTiempo());
         numImagen++;
-        hayAnuncios = gestor.numEnEspera() > 0;
     }
 }
 
