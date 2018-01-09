@@ -27,6 +27,7 @@ private:
 	int altura;				//Altura de la ventana (valla publicitaria)
 	int anchura;			//Anchura de la ventana (valla publicitaria)
 public:
+	Valla() = default;
 	Valla(const int alto, const int ancho);
 	~Valla();
 	//Cambia el anuncio que se estaba mostrando por el anuncio a

@@ -32,3 +32,4 @@
 *.app
 src/cliente
 src/subastador
+src/gestor
