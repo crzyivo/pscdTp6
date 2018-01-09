@@ -34,6 +34,7 @@ private:
 	mutex exclusionDatos;        
 	condition_variable envioPujas;	
 	condition_variable comenzarS;
+	condition_variable esperarClientes;
 public:
 	monitorSubasta();
 	~monitorSubasta();
@@ -68,6 +69,7 @@ public:
 	void anyadirPujador();
 	void quitarPujador();
 	int numPujadores();
+	bool comenzarSubastas();
 
 
 };

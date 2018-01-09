@@ -11,13 +11,26 @@
 #include <chrono>
 #include <thread>
 #include <cstdlib>
+#include <csignal>
 #include "Socket.hpp"
 
 using namespace std;
 
 const int MESSAGE_SIZE = 4001; //mensajes de no más 4000 caracteres
+void pasar{
+
+}
+
 
 int main(int argc, char *argv[]) {
+    
+	struct sigaction act;
+    memset(&act, 0, sizeof(act));
+    act.sa_sigaction = pasar();
+    act.sa_flags = SA_RESTART | SA_SIGINFO;
+    //sigemptyset(&act.sa_mask);
+	sigaction(SIGALRM, &act, NULL);
+
 	srand(time(0));
 	const string MENS_FIN("END OF SERVICE");
 	// Dirección y número donde escucha el proceso servidor

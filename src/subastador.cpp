@@ -28,8 +28,9 @@ int puertoSubasta = 32005;
 
 void controlSubasta(){
 	srand(time(NULL));
-	while(mSubas.SalonAbierto()){
+	while(mSubas.comenzarSubastas() && mSubas.SalonAbierto()){
 		//NO EMPEZAR CON 0 Clientes
+		cout << "\033[1;34mSalon abierto. Esperando a que se conecten todos los clientes interesados\033[0m\n";
 		this_thread :: sleep_for(chrono :: milliseconds(tiempoEntrePujas*10));
 		mSubas.iniciarNuevaSubasta(rand()%MAX_TIEMPO_VALLA+MIN_TIEMPO_VALLA); 
 		while(mSubas.numPujadores() > 0 && mSubas.SubastaEnCurso()){
