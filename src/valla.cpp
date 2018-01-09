@@ -6,12 +6,12 @@
 
 #include "valla.hpp"
 
-Valla(const int alto, const int ancho) {
+Valla::Valla(const int alto, const int ancho) {
     altura = alto;
     anchura = ancho;
     mostrado = Anuncio();
 }
-~Valla() {
+Valla::~Valla() {
 }
 
 //Cambia el anuncio que se estaba mostrando por el anuncio a
