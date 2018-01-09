@@ -11,7 +11,7 @@
  */
 #ifndef VALLA_HPP
 #define VALLA_HPP
-#define MAX_LONG_URL = 500;	//Máxima longitud permitida para la URL
+#define MAX_LONG_URL 500;	//Máxima longitud permitida para la URL
 
 #include <iostream>
 #include <mutex>
