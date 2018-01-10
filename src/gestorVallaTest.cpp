@@ -23,27 +23,29 @@ using namespace std;
 using namespace cimg_library;
 
 const int MAX_LONG_NOMBRE_IMG = 100;    //Longitud máxima del nombre de una imagen
-//MonitorValla gestor();                  //Monitor que asegura desencolar en exclusión mutua
 const int NUM_VALLAS = 2;               //Número de vallas que se ofertan
+//MonitorValla gestor;
 
-void mostrarImagen (Valla v, const int numValla, MonitorValla gestor) {
+void mostrarImagen (Valla v, const int numValla, MonitorValla* gestor) {
+   
     int numImagen = 1;                      //Recuento de imágenes que ha mostrado este proceso
     Anuncio anuncio;                        //Variable que nos permite guardar el anuncio
     char nombreVentana[MAX_LONG_NOMBRE_IMG];    //Nombre de la ventana que representa la valla
-    char numV = (char) numValla + '0';      //Pasa el número de valla a caracter
+    char numV = numValla + '0';      //Pasa el número de valla a caracter
+    //(nombreVentana, 0);
     
     strcpy(nombreVentana, "Valla ");
-    strcat(nombreVentana, numV);
+    strcat(nombreVentana, &numV);
     
-    while ( gestor.obtenerAnuncio(anuncio) ) {
+    while (gestor->obtenerAnuncio(anuncio)) {
        
         char numImg = (char) numImagen + '0';   //Pasa el número de imagen a caracter
         char URL[MAX_LONG_URL];                 //Guarda URL que se ha de descargar
         char nombreImg[MAX_LONG_NOMBRE_IMG];    //Nombre que tendrá la imagen que se descargue
 
         strcpy(nombreImg, "IMG");               
-        strcat(nombreImg, numV);   
-        strcat(nombreImg, numImg);
+        strcat(nombreImg, &numV);   
+        strcat(nombreImg, &numImg);
         strcat(nombreImg, ".jpg");              //nombreImg = IMG*numValla**numImg*.jpg
 
         // Creamos el objeto para descargar imágenes
@@ -63,7 +65,7 @@ void mostrarImagen (Valla v, const int numValla, MonitorValla gestor) {
     }
 }
 
-void runGestorValla() {
+void runGestorValla(MonitorValla* gestor) {
     // Tamaños de ventana para las vallas publicitarias
     const int VALLA_WIDTH = 800;
     const int VALLA_HEIGHT = 800;
@@ -72,13 +74,11 @@ void runGestorValla() {
     thread mostrar[NUM_VALLAS];
 
     for (int i = 0; i < NUM_VALLAS; i++) {
-        vallasDisponibles[i](VALLA_HEIGHT, VALLA_WIDTH);
-        mostrar[i] = thread (&mostrarImagen, vallasDisponibles[i], i+1, gestor)
+        vallasDisponibles[i]= Valla(VALLA_HEIGHT, VALLA_WIDTH);
+        mostrar[i] = thread (&mostrarImagen, vallasDisponibles[i] , i+1, gestor);
     }
 
     for (int i = 0; i < NUM_VALLAS; i++) {
         mostrar[i].join();
     }
-
-    return 0;
 }

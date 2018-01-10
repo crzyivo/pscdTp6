@@ -24,11 +24,13 @@ const int maxNumCLientes = 35;
 const int tiempoEntrePujas = 2000; //Tiempo que ha de esperar a que los interesados contesten
 const int MAX_TIEMPO_VALLA = 30;
 const int MIN_TIEMPO_VALLA = 2;
+int puertoSubasta = 32005;
 
-void controlSubasta(monitorSubasta mSubas){
+void controlSubasta(monitorSubasta* mSubas){
 	srand(time(NULL));
-	while(mSubas.SalonAbierto()){
+	while(mSubas.comenzarSubastas() && mSubas->SalonAbierto()){
 		//NO EMPEZAR CON 0 Clientes
+		cout << "\033[1;34mSalon abierto. Esperando a que se conecten todos los clientes interesados\033[0m\n";
 		this_thread :: sleep_for(chrono :: milliseconds(tiempoEntrePujas*10));
 		mSubas.iniciarNuevaSubasta(rand()%MAX_TIEMPO_VALLA+MIN_TIEMPO_VALLA); 
 		while(mSubas.numPujadores() > 0 && mSubas.SubastaEnCurso()){
@@ -41,7 +43,7 @@ void controlSubasta(monitorSubasta mSubas){
 }
 
 
-void subastaCliente(Socket *subasta, int cliente, monitorSubasta mSubas){
+void subastaCliente(Socket *subasta, int cliente,monitorSubasta* mSubas){
 	bool enSubasta = true;
 	const int maxMensaje = 1000;
 	//Bucle de subastas
@@ -98,7 +100,26 @@ void subastaCliente(Socket *subasta, int cliente, monitorSubasta mSubas){
 	mSubas.quitarPujador();
 }
 
-void RunSubastador(int puertoSubasta, monitorSubasta mSubas){
+int main(int argc, char * argv[]){
+	string dir;
+		if(argc >1){	//Inicializa con Parametros
+		for (int i = 1; i< argc; i++){
+			if(*argv[i]++ == '-'){
+				if(*argv[i] == 'p'){		//numero de vueltas
+					if(*++argv[i] == '\0'){i++;/*saltar espacio en blanco*/}
+					puertoSubasta = atoi(argv[i]);
+				}else if(*argv[i] == 'd'){	//mnumero surtidores
+					if(*++argv[i] == '\0'){i++; /*saltar espacio en blanco*/}
+					dir = argv[i];
+				}else{
+					cout << "Uso: [-p<puerto>] [-d<direccion>]\n";
+					cout << "\t-p<puerto>: puerto del servidor\n";
+					cout << "\t-d<direccion>: direccion servidor\n";
+					exit(1);
+				}
+			}
+		}
+	}
 //	puertoSubasta = 25000;
 	Socket subasta(puertoSubasta);
         cout<<"Puerto de la subasta "<< puertoSubasta << endl;
@@ -115,13 +136,13 @@ void RunSubastador(int puertoSubasta, monitorSubasta mSubas){
         subasta.Close(sockSubasta);
         exit(1);
         }
-		thread com(&controlSubasta,mSubas);
+		thread com(&controlSubasta);
 		com.detach();
 	while(mSubas.SalonAbierto()){
 		//Abrir Salon
 		int cliente = subasta.Accept();
 		cout << "Cliente con fd " + to_string(cliente) + " ha entrado en subasta conectado\n";
-		thread th(&subastaCliente, &subasta,cliente,mSubas);
+		thread th(&subastaCliente, &subasta,cliente);
 		th.detach();
 		// esperar a que puedan entrar más clientes a Subasta
 
@@ -129,4 +150,7 @@ void RunSubastador(int puertoSubasta, monitorSubasta mSubas){
 	cout << "bye bye\n";
 	mSubas.finSubasta();
 	subasta.Close(sockSubasta);
+
+	
+	return 0;
 }

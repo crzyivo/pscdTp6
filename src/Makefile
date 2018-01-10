@@ -38,7 +38,7 @@ ImageDownloader.o: ImageDownloader.hpp ImageDownloader.cpp
 	
 #Administrador
 
-administrador: administrador.o  mValla.o valla.o anuncio.o
-	g++ mValla.o valla.o anuncio.o administrador.o -o admin -std=c++11 -L/usr/X11R6/lib -L/usr/local/lib -lm -pthread -lcurl -lX11
+administrador: administrador.o  mValla.o valla.o anuncio.o ImageDownloader.o
+	g++ mValla.o valla.o anuncio.o ImageDownloader.o administrador.o -o admin -std=c++11 -L/usr/X11R6/lib -L/usr/local/lib -lm -pthread -lcurl -lX11
 administrador.o: administrador.cpp mValla.o valla.o anuncio.o
 	g++ -c -std=c++11 administrador.cpp mValla.o valla.o anuncio.o
