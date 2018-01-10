@@ -61,5 +61,8 @@ void  MonitorValla::informacion (int& imgMost, int& tpoMost, int& tpoCont, int& 
 
 //FinPeticiones = true
 void MonitorValla::finServicio() {
+    unique_lock<recursive_mutex> lck(mtx);
+    
     finPeticiones = true;
+    cv.notify_all();
 }
