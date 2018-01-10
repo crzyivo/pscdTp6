@@ -63,7 +63,7 @@ void mostrarImagen (Valla v, const int numValla, MonitorValla gestor) {
     }
 }
 
-void runGestorValla(MonitorValla gestor) {
+void runGestorValla() {
     // Tamaños de ventana para las vallas publicitarias
     const int VALLA_WIDTH = 800;
     const int VALLA_HEIGHT = 800;
