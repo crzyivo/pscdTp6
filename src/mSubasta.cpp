@@ -1,6 +1,7 @@
 #include "mSubasta.hpp"
 
 monitorSubasta::monitorSubasta(){
+	this->numMensaje = 0;
 	this->pujadoresObservando = 0;
 	this->pujadorMasAlto = -1; //-1 = no hay pujador
 	this->posibleGanador = -1;
@@ -36,11 +37,12 @@ bool monitorSubasta::iniciarNuevaSubasta(int tiempoValla){
 		this->pujadorMasAlto = -1; //-1 = no hay pujador
 		this->posibleGanador = -1;
 		this->pujaMasAlta = tiempoValla*CoeficienteTiempo;
-		this->precioRequerido = this->pujaMasAlta+CuotaMercado;
+		this->precioRequerido = this->pujaMasAlta+5;
 		this->pujaMinima = this->pujaMasAlta;
 		this->numPujas = 0;
 		this->numPujasSend = 0;
 		this->aceptandoPujas = true;
+		this->numMensaje++;
 		this->comenzarS.notify_all();
 	}
 }
@@ -105,6 +107,7 @@ void monitorSubasta::enviarPuja(){
 	}
 	this->posibleGanador = this->pujadorMasAlto;
 	this->primero = true;
+	this->numMensaje++;
 	this->envioPujas.notify_all();
 }
 //devuelve true si y solo si se pueden conectar clientes
@@ -134,4 +137,14 @@ bool monitorSubasta::comenzarSubastas(){
 		this->esperarClientes.wait(lck);
 	}
 	return this->pujadoresObservando > 0;
+}
+
+int monitorSubasta::nMensaje(){
+	unique_lock<mutex> lck(this->exclusionDatos);
+	return this->numMensaje;
+}
+
+bool monitorSubasta::numMenAceptado(int numero){
+	unique_lock<mutex> lck(this->exclusionDatos);
+	return this->numMensaje <= numero;
 }

@@ -20,6 +20,7 @@ using namespace std;
 class monitorSubasta{
 private:
 	int TiempoAnuncio; //Tiempo en subasta de una valla
+	int numMensaje;
 	int pujadoresObservando;
 	int precioRequerido;	//Precio ha alcanzar
 	int pujadorMasAlto;	//Cliente que contiene la puja mas alta en tiempo T (no implica que sea unico)
@@ -65,12 +66,13 @@ public:
 	bool CerrarSalon();
 	//Despierta el proceso para que pueda cerrar el socket
 	void finSubasta();
-
+	//
 	void anyadirPujador();
 	void quitarPujador();
 	int numPujadores();
 	bool comenzarSubastas();
-
+	int nMensaje();
+	bool numMenAceptado(int numero);
 
 };
 

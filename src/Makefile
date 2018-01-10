@@ -1,5 +1,5 @@
 
-all: subastador gestor
+all: subastador cliente
 
 #Subastador
 subastador: subastador.cpp Socket.o mSubasta.o
