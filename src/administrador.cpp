@@ -1,35 +1,29 @@
 
+#include <iostream>
+#include <cstdlib>
+#include <string>
+#include <list>
+#include <thread>
+#include <atomic>
 
+#include "mValla.hpp"
+// #include "mSubasta.hpp"
+// #include "subastadorTest.cpp"
+#include "gestorVallaTest.cpp"
 using namespace std;
 
-Class estadoSistema{
-  private:
-    int nPeticiones;
-    int tiempoEstimado;
-  public:
-    estadoSistema(int n,int t){
-      nPeticiones = n;
-      tiempoEstimado = t;
-    }
-    int getnPeticiones(){
-      return nPeticiones;
-    }
-    int gettiempoEstimado(){
-      return tiempoEstimado;
-    }
-};
   
-estadoSistema mostrarEstado (MonitorValla m){
+void mostrarEstado(MonitorValla m, int& nPeticiones, int& tiempoEstimado){
   int imgTot;
   int imgCol;
   int tiempoM;
   int tiempoC;
-  m.informacion(img,tiempoM,tiempoC,imgCol);
-  estadoSistema estado = estadoSistema(imgCol,tiempoC);
-  return estado;
+  m.informacion(imgTot,tiempoM,tiempoC,imgCol);
+  nPeticiones = imgCol;
+  tiempoEstimado = tiempoC;
 }
 
-void main(int argc, char * argv[]){
+int main(int argc, char * argv[]){
 	string dir;
   int puertoSubasta = 32005;
   if(argc >1){	//Inicializa con Parametros
@@ -51,9 +45,11 @@ void main(int argc, char * argv[]){
 		}
 	}
   //Monitores
-  MonitorValla vallas = MonitorValla();
-  monitorSubasta subasta = monitorSubasta();
+  MonitorValla vallas();
+  //monitorSubasta subasta();
   
   thread thMV(&runGestorValla,vallas);
+  
+  return 0;
   
 }
