@@ -18,11 +18,11 @@ cliente: Cliente.cpp Socket.o
 
 #GestorValla
 
-gestor: gestor.o anuncio.o valla.o mValla.o ImageDownloader.o
-	g++ anuncio.o valla.o mValla.o ImageDownloader.o gestor.o -o gestor -L/usr/X11R6/lib -L/usr/local/lib -lm -pthread -lcurl -lX11
+gestor: gestorValla.o anuncio.o valla.o mValla.o ImageDownloader.o
+	g++ anuncio.o valla.o mValla.o ImageDownloader.o gestorValla.o -o gestor -L/usr/X11R6/lib -L/usr/local/lib -lm -pthread -lcurl -lX11
 
-gestor.o:gestorValla.cpp anuncio.o valla.o mValla.o ImageDownloader.o
-	g++ -c -I. -I/usr/local/include -O2 -std=c++11 -fmax-errors=1 -Werror gestorValla.cpp anuncio.o valla.o mValla.o ImageDownloader.o
+gestorValla.o:gestorValla.cpp anuncio.o valla.o mValla.o ImageDownloader.o
+	g++ -c -pthread -I. -I/usr/local/include -O2 -std=c++11  -fmax-errors=1 -Werror gestorValla.cpp anuncio.o valla.o mValla.o ImageDownloader.o
 
 anuncio.o: anuncio.hpp anuncio.cpp
 	g++ -c -std=c++11 anuncio.cpp
