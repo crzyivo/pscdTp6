@@ -125,7 +125,6 @@ void subastaCliente(Socket *subasta, int cliente , monitorSubasta * mSubas,Monit
 							}	
 						}
 					}else{
-						//if(mensajeChar == "")
 						mensajeOut = to_string(mSubas->nMensaje()) +";La subasta esta mas adelantada. Por favor, espere una nueva subasta\n";
 						cerr << "\033[35mCliente va con retraso, esperara nueva subasta\033[0m\n";
 						if(subasta->Send(cliente, mensajeOut) <= 0){
