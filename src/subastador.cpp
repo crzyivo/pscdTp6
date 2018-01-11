@@ -95,12 +95,12 @@ void subastaCliente(Socket *subasta, int cliente , monitorSubasta * mSubas,Monit
 									if(mSubas->PujadorActual() ==  cliente){
 										subasta->Send(cliente, mensajeOut);
 										subasta->Recv(cliente, mensajeIn, maxMensaje);
-										mensajeIn = strtok(strdup(mensajeIn.c_str()), ":");
+										string obUrl = strtok(strdup(mensajeIn.c_str()), ":");
 										cout << mensajeIn << endl;
-										while("http" != mensajeIn) {
+										while("http" != obUrl) {
 											subasta->Send(cliente, "Usted ha ganado la puja, por favor, envia una url valida\n");
 											subasta->Recv(cliente, mensajeIn, maxMensaje);
-											mensajeIn = strtok(strdup(mensajeIn.c_str()), ":");
+											obUrl = strtok(strdup(mensajeIn.c_str()), ":");
 										}
 											//subasta->Send(cliente, "URL recibida\n");
 											mensajeOut = "URL recibida\n";
@@ -182,27 +182,4 @@ int runSubastador(int puertoSubasta, monitorSubasta *mSubas, MonitorValla *mV){
 	
 	
 	return 0;
-}
-
-int main(int argc, char* argv[]){
-	int puertoSubasta = 32005;
-		if(argc >1){	//Inicializa con Parametros
-		for (int i = 1; i< argc; i++){
-			if(*argv[i]++ == '-'){
-				if(*argv[i] == 'p'){		//numero de vueltas
-					if(*++argv[i] == '\0'){i++;/*saltar espacio en blanco*/}
-					puertoSubasta = atoi(argv[i]);
-				
-				}else{
-					cout << "Uso: [-p<puerto>] [-d<direccion>]\n";
-					cout << "\t-p<puerto>: puerto del servidor\n";
-					cout << "\t-d<direccion>: direccion servidor\n";
-					exit(1);
-				}
-			}
-		}
-	}
-	MonitorValla v;
-	monitorSubasta mSubas;
-	runSubastador(puertoSubasta, &mSubas,&v);
 }

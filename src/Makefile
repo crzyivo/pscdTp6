@@ -7,7 +7,7 @@ CPPFLAGS=-I. -I/usr/local/include -O2 -std=c++11
 LDFLAGS=-L/usr/X11R6/lib -L/usr/local/lib -lm -pthread -lcurl -lX11  
 SOCKETSFLAGS=-lsocket -lnsl # Flags linkado sockets (Solaris SunOS)
 
-all: subastador cliente
+all: administrador cliente
 
 #Subastador
 subastador: subastador.cpp Socket.o mSubasta.o anuncio.o mValla.o
@@ -58,3 +58,4 @@ administrador.o: administrador.cpp mSubasta.o mValla.o valla.o anuncio.o Socket.
 # LIMPIEZA
 clean:
 	rm -f *.o
+	rm -f *.jpg

@@ -9,7 +9,7 @@
 #include "mValla.hpp"
 #include "anuncio.hpp"
 #include "mSubasta.hpp"
-#include "subastadorTest.cpp"
+#include "subastador.cpp"
 #include "gestorValla.cpp"
 using namespace std;
 
