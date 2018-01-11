@@ -93,26 +93,3 @@ void runGestorValla(MonitorValla* gestor) {
         mostrar[i].join();
     }
 }
-
-int main() {
-    char direccion1[100];
-    char direccion2[100];
-    char direccion3[100];
-    char direccion4[100];
-    strcpy(direccion1, "https://i.imgur.com/KwoYkdc.jpg");
-    strcpy(direccion2, "https://i.imgur.com/v1YCACF.png");
-    strcpy(direccion3, "https://i.imgur.com/1eJ1q0V.jpg");
-    strcpy(direccion4, "https://i.imgur.com/xyya1CC.jpg");
-    Anuncio anun1(direccion1, 5000);
-    Anuncio anun2(direccion2, 5000);
-    Anuncio anun3(direccion3, 5000);
-    Anuncio anun4(direccion4, 5000);
-    MonitorValla gestor;
-    gestor.encolar(anun1);
-    gestor.encolar(anun2);
-    gestor.encolar(anun3);
-    gestor.encolar(anun4);
-    gestor.finServicio();
-    runGestorValla(&gestor);
-    return 0;
-}

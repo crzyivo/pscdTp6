@@ -1,9 +1,20 @@
 
+
+# #################### #
+# FLAGS DE COMPILACION #
+# #################### #
+CPPFLAGS=-I. -I/usr/local/include -O2 -std=c++11
+LDFLAGS=-L/usr/X11R6/lib -L/usr/local/lib -lm -pthread -lcurl -lX11  
+SOCKETSFLAGS=-lsocket -lnsl # Flags linkado sockets (Solaris SunOS)
+
 all: subastador cliente
 
 #Subastador
 subastador: subastador.cpp Socket.o mSubasta.o anuncio.o mValla.o
 	g++ -std=c++11 -pthread -o subastador subastador.cpp Socket.o mSubasta.o anuncio.o mValla.o
+	
+subastador.o: subastador.cpp Socket.o mSubasta.o anuncio.o mValla.o
+	g++ -c -std=c++11 -pthread subastador.cpp Socket.o mSubasta.o anuncio.o mValla.o
 
 Socket.o: Socket.cpp
 	g++ -c -std=c++11 Socket.cpp
@@ -38,10 +49,11 @@ ImageDownloader.o: ImageDownloader.hpp ImageDownloader.cpp
 	
 #Administrador
 
-administrador: administrador.o  mValla.o valla.o anuncio.o ImageDownloader.o
-	g++ mValla.o valla.o anuncio.o ImageDownloader.o administrador.o -o admin -std=c++11 -L/usr/X11R6/lib -L/usr/local/lib -lm -pthread -lcurl -lX11
-administrador.o: administrador.cpp mValla.o valla.o anuncio.o
-	g++ -c -std=c++11 administrador.cpp mValla.o valla.o anuncio.o
+administrador: administrador.o mSubasta.o mValla.o valla.o anuncio.o Socket.o ImageDownloader.o
+	g++ administrador.o mValla.o valla.o anuncio.o Socket.o mSubasta.o ImageDownloader.o -o admin ${LDFLAGS} 
+	
+administrador.o: administrador.cpp mSubasta.o mValla.o valla.o anuncio.o Socket.o 
+	g++ -c ${CPPFLAGS} administrador.cpp mSubasta.o mValla.o valla.o anuncio.o Socket.o 
 	
 # LIMPIEZA
 clean:

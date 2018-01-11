@@ -8,9 +8,9 @@
 
 #include "mValla.hpp"
 #include "anuncio.hpp"
-// #include "mSubasta.hpp"
-// #include "subastadorTest.cpp"
-#include "gestorVallaTest.cpp"
+#include "mSubasta.hpp"
+#include "subastadorTest.cpp"
+#include "gestorValla.cpp"
 using namespace std;
 
   
@@ -35,7 +35,7 @@ void mostrarHistorico(MonitorValla* m, int& nPeticiones, double& tiempoTotal, do
 }
 
 int main(int argc, char * argv[]){
-//   int puertoSubasta = 32005;
+  int puertoSubasta = 32005;
 //   if(argc >1){	//Inicializa con Parametros
 // 		for (int i = 1; i< argc; i++){
 // 			if(*argv[i]++ == '-'){
@@ -52,7 +52,7 @@ int main(int argc, char * argv[]){
 // 	}
   //Monitores
   MonitorValla vallas;
-//   monitorSubasta subasta;
+  monitorSubasta subasta;
   char *direccion ="http://i.imgur.com/evzIQVF.jpg";
   Anuncio a(direccion, 3000);
   vallas.encolar(a);
@@ -64,7 +64,7 @@ int main(int argc, char * argv[]){
   
   //Inicio el gestor de vallas y de la subasta.
   thread thMV(&runGestorValla,&vallas);
-//   thread thMS(&runSubastador, &subasta);
+  thread thMS(&runSubastador,puertoSubasta ,&subasta, &vallas);
   
   //Bucle de instrucciones
   bool fin = false;
@@ -102,6 +102,7 @@ int main(int argc, char * argv[]){
 
   
   thMV.join();
+  thMS.join();
   
   cout<<"Fin correcto del servicio"<<endl;
   
