@@ -29,8 +29,8 @@ using namespace std;
 class MonitorValla{
 private:
 	queue<Anuncio> esperando;	//Cola que controla las peticiones pendientes de ser atendidas
-	int tiempoContratado;		//Tiempo (en milisegundos) que se ha contratado para mostrar publicidad
-	int tiempoMostrado;			//Tiempo total (en milisegundos) que se han mostrado anuncios
+	int tiempoContratado;		//Tiempo (en segundos) que se ha contratado para mostrar publicidad
+	int tiempoMostrado;			//Tiempo total (en segundos) que se han mostrado anuncios
 	int imagenesMostradas;		//Número de imágenes que han sido mostradas
 	bool finPeticiones;			//Cierto si y solo si ya no se van a encolar más anuncios
 	recursive_mutex mtx;        

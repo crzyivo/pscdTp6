@@ -25,7 +25,7 @@ using namespace std;
 class Anuncio{
 private:
 	char URL[500];	//Dirección desde la que tiene que descargarse la imagen
-	int tiempo;		//Tiempo en milisegundos que se va a mostrar la imagen del URL
+	int tiempo;		//Tiempo en segundos que se va a mostrar la imagen del URL
 public:
 	Anuncio() = default;
 	//Constructor de anuncio
