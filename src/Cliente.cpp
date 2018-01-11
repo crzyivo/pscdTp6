@@ -35,7 +35,8 @@ int main(int argc, char *argv[]) {
     // acti.sa_flags =0;
     // sigemptyset(&acti.sa_mask);
 	// sigaction(SIGALRM, &acti, &def);
-
+	bool automatic = false;
+	int maxOferta = 50;
 	srand(time(0));
 	const string MENS_FIN("END OF SERVICE");
 	// Dirección y número donde escucha el proceso servidor
@@ -51,6 +52,9 @@ int main(int argc, char *argv[]) {
 				}else if(*argv[i] == 'd'){	//mnumero surtidores
 					if(*++argv[i] == '\0'){i++; /*saltar espacio en blanco*/}
 					SERVER_ADDRESS = argv[i];
+				}else if(*argv[i] == 'a'){	//Modo automatico
+					automatic = true;
+					maxOferta = rand() % 150;
 				}else{
 					cout << "Uso: [-p<puerto>] [-d<direccion>]\n";
 					cout << "\t-p<puerto>: puerto del servidor\n";
@@ -114,11 +118,23 @@ int main(int argc, char *argv[]) {
 	cout << nueva_puja << endl;
 	bool salirSubastas = false;
 	while(!salirSubastas){
-
-		cout << "escriba a,p,sp o ss para:\na -> para aceptar puja\np -> pasar puja\nsp-> salir de la puja actual y esperar una nueva\nss -> finalizar subasta\n";
-		cin >> puja;
-		cout << "\033[32m" + puja + "\033[0m\n";
-
+		bool aceptarSiguiente = true;
+		if(!automatic){
+			cout << "escriba a,p,sp o ss para:\na -> para aceptar puja\np -> pasar puja\nsp-> salir de la puja actual y esperar una nueva\nss -> finalizar subasta\n";
+			cin >> puja;
+			cout << "\033[32m" + puja + "\033[0m\n";
+		}else if(!aceptarSiguiente){
+			puja = "sp";
+		}else{
+			int noPujar = rand() %100;
+			if(noPujar < 60){
+				puja = "a";
+			}else if(noPujar == 99){
+				puja = "sp";
+			}else{
+				puja = "p";
+			}
+		}
 		if(puja == "p"){
 			read_bytes = socket.Send(socket_fd, numMensaje + ";Paso\n");
 		}else if(puja == "a"){
@@ -138,6 +154,33 @@ int main(int argc, char *argv[]) {
 		nueva_puja = strtok(NULL, ";");		//TRATAR MENSAJES DE ENTRADA DE LA SUBASTA
 		cout << nueva_puja;
 		string gan = strtok(strdup(nueva_puja.c_str()), " ");
+		if(automatic){
+			string seguir = strtok(strdup(nueva_puja.c_str()), " ");
+			int pujadores;
+			int pujaActual;
+			if(seguir == "Hay"){
+			//	mensajeOut = to_string(mSubas->nMensaje()) +";Hay " + to_string(numPujadores) + ". Quien ofrece: " +to_string(mSubas->pujaActual()) + "\n";
+				sscanf(nueva_puja.c_str(), "Hay %d. Quien ofrece: %d\n", &pujadores, &pujaActual);
+					if(pujaActual > maxOferta){
+						aceptarSiguiente = false;
+					}else{
+						aceptarSiguiente = true;
+					}
+				
+			}else if(seguir == "Pujador"){
+				sscanf(nueva_puja.c_str(), "Pujador %d hizo la max oferta. Quien ofrece: %d\n", &pujadores, &pujaActual);
+				if(pujadores == miID){ //no volver a pujar
+					aceptarSiguiente = false;
+					
+				}else{ //volver a pujar o salir puja
+					if(pujaActual > maxOferta){
+						aceptarSiguiente = false;
+					}else{
+						aceptarSiguiente = true;
+					}
+				}
+			}
+		}
 		if(gan == "Ganador" || "Usted" == gan){
 			int ganador;
 			if(gan == "Ganador"){

@@ -58,22 +58,22 @@ void subastaCliente(Socket *subasta, int cliente , monitorSubasta * mSubas,Monit
 			//esperar a que se dé la condición de iniciar subasta
 			int precioInicial = mSubas->comenzarSubasta();	//Bloqueante. devuelve precio de salida de subasta
 			string mensajeIn = "";	//Mensajes desde cliente
-			string mensajeOut = to_string(mSubas->nMensaje()) +";Comienza la subasta en " + to_string(precioInicial) + " para un tiempo " + to_string(mSubas->tiempoSubas()) +"\n"; //mensajes para cliente
+			int t = mSubas->tiempoSubas();
+			string mensajeOut = to_string(mSubas->nMensaje()) +";Comienza la subasta en " + to_string(precioInicial) + " para un tiempo " + to_string(t) +"\n"; //mensajes para cliente
 			bool seguirPuja = true;	//true = Cliente esta interesado en observar constantemente el estado de la subasta actual
 			//Bucle de subasta
 			//Cada iteracion corresponde al envio del precio actual, recibir y tratar mensajes de pujadores
 			while(seguirPuja && mSubas->SubastaEnCurso()){
 				cout << mensajeOut;
 				if(subasta->Send(cliente, mensajeOut) >0){
-
 					subasta->Recv(cliente, mensajeIn, maxMensaje);
 					cout << mensajeIn;
 					//tratar mensajeIn
 					
-					char * mensajesN = strtok( strdup(mensajeIn.c_str()), ";");
-					string mensajeChar = strtok( NULL, ";");
+					char * mensajesN = strtok( strdup(mensajeIn.c_str()), ";");//Separar numMensaje
+					string mensajeChar = strtok( NULL, ";"); //Separar mensaje
 					cerr << "\033[31m" + mensajeChar + "\033[0m";
-					if(mSubas->numMenAceptado(atoi(mensajesN))){
+					if(mSubas->numMenAceptado(atoi(mensajesN)) || mensajeChar == "Salir de subasta\n" ){
 						if(mensajeChar == SaltarPujas){	//pujador no interesado en seguir subasta actual
 							seguirPuja = false;
 							if(subasta->Send(cliente, to_string(mSubas->nMensaje()) +";Subasta actual ignorada, esperando a que termine\n") <= 0){
@@ -104,7 +104,6 @@ void subastaCliente(Socket *subasta, int cliente , monitorSubasta * mSubas,Monit
 										}
 											//subasta->Send(cliente, "URL recibida\n");
 											mensajeOut = "URL recibida\n";
-											int t = mSubas->tiempoSubas();
 											Anuncio anun(mensajeIn.c_str(), t); 
 											mV->encolar(anun);
 											
@@ -126,11 +125,12 @@ void subastaCliente(Socket *subasta, int cliente , monitorSubasta * mSubas,Monit
 							}	
 						}
 					}else{
+						if(mensajeChar == "")
 						mensajeOut = to_string(mSubas->nMensaje()) +";La subasta esta mas adelantada. Por favor, espere una nueva subasta\n";
 						cerr << "\033[35mCliente va con retraso, esperara nueva subasta\033[0m\n";
 						if(subasta->Send(cliente, mensajeOut) <= 0){
-									enSubasta = false;
-								}
+							enSubasta = false;
+						}
 						seguirPuja = false;
 					}
 				}else{
