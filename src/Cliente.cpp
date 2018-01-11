@@ -166,13 +166,13 @@ int main(int argc, char *argv[]) {
 		//Si no hay ganador
 		//Si he salido de la puja
 		//Si he salido de la subasta
-		
-		if("La subasta esta mas adelantada. Por favor, espere una nueva subasta\n"== nueva_puja 
-			||"Minimo no alcanzado\n" == nueva_puja
-			|| "Saliendo de subasta actual, esperando a que termine\n" == nueva_puja ){
+		nueva_puja = strtok(strdup(nueva_puja.c_str()), " "); 
+		cerr << "\033[34m" + nueva_puja + "\033[0m\n";
+		if(nueva_puja != "Pujador" && nueva_puja != "Hay" && nueva_puja !="Saliendo"){
 		//REVISAR GUARDA!!!!!!!!!!
 			cout << "Estoy esperando nueva subasta\n";
 			read_bytes = socket.Recv(socket_fd,nueva_puja,MESSAGE_SIZE); 
+			cout << "\033[34m" + nueva_puja + "\033[0m\n";
 			numMensaje = strtok(strdup(nueva_puja.c_str()), ";");
 			nueva_puja = strtok(NULL, ";");
 						

@@ -76,7 +76,7 @@ void subastaCliente(Socket *subasta, int cliente , monitorSubasta * mSubas,Monit
 					if(mSubas->numMenAceptado(atoi(mensajesN))){
 						if(mensajeChar == SaltarPujas){	//pujador no interesado en seguir subasta actual
 							seguirPuja = false;
-							if(subasta->Send(cliente, to_string(mSubas->nMensaje()) +";Saliendo de subasta actual, esperando a que termine\n") <= 0){
+							if(subasta->Send(cliente, to_string(mSubas->nMensaje()) +";Subasta actual ignorada, esperando a que termine\n") <= 0){
 								enSubasta = false;
 							}
 						}else if(mensajeChar == SalirSubasta){	//pujador no interesado en ninguna subasta
@@ -102,10 +102,12 @@ void subastaCliente(Socket *subasta, int cliente , monitorSubasta * mSubas,Monit
 											subasta->Recv(cliente, mensajeIn, maxMensaje);
 											mensajeIn = strtok(strdup(mensajeIn.c_str()), ":");
 										}
-											subasta->Send(cliente, "URL recibida\n");
+											//subasta->Send(cliente, "URL recibida\n");
+											mensajeOut = "URL recibida\n";
 											int t = mSubas->tiempoSubas();
 											Anuncio anun(mensajeIn.c_str(), t); 
 											mV->encolar(anun);
+											
 										//Encolar URL
 									}
 								}else{

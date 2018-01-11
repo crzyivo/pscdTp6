@@ -5,7 +5,7 @@
 #define Pasa "Paso\n"
 #define SaltarPujas "Salir puja Actual\n"
 #define SalirSubasta "Salir de subasta\n"
-#define CuotaMercado 43
+#define CuotaMercado 10
 #define CoeficienteTiempo 1.25
 #define incrementoPuja 5
 

@@ -37,7 +37,7 @@ bool monitorSubasta::iniciarNuevaSubasta(int tiempoValla){
 		this->pujadorMasAlto = -1; //-1 = no hay pujador
 		this->posibleGanador = -1;
 		this->pujaMasAlta = tiempoValla*CoeficienteTiempo;
-		this->precioRequerido = this->pujaMasAlta+5;
+		this->precioRequerido = this->pujaMasAlta+CuotaMercado;
 		this->pujaMinima = this->pujaMasAlta;
 		this->numPujas = 0;
 		this->numPujasSend = 0;
