@@ -151,5 +151,5 @@ bool monitorSubasta::numMenAceptado(int numero){
 
 void monitorSubasta::CerrarSocket(){
 	unique_lock<mutex> lck(this->exclusionDatos);
-	this->cerrarSubasta.signal();
+	this->cerrarSubasta.notify_all();
 }
