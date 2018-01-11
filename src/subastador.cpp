@@ -42,6 +42,7 @@ void controlSubasta(monitorSubasta *mSubas){
 			cerr << "\033[32m Todos Avisados \033[0m\n";
 		}
 	}
+	mSubas->CerrarSocket();
 }
 
 
@@ -166,9 +167,9 @@ int runSubastador(int puertoSubasta, monitorSubasta *mSubas, MonitorValla *mV){
 	}
 	thread com(&controlSubasta, mSubas);
 	com.detach();
-	while(mSubas->SalonAbierto()){
+        int cliente;
+	while((cliente =subasta.Accept()) > -1 && mSubas->SalonAbierto()){
 		//Abrir Salon
-		int cliente = subasta.Accept();
 		cout << "Cliente con fd " + to_string(cliente) + " ha entrado en subasta conectado\n";
 		thread th(&subastaCliente, &subasta,cliente, mSubas, mV);
 		th.detach();

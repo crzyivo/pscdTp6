@@ -24,6 +24,9 @@ void monitorSubasta::anyadirPujador(){
 void monitorSubasta::quitarPujador(){
 	unique_lock<mutex> lck(this->exclusionDatos);
 	this->pujadoresObservando--;
+        if(this->pujadoresObservando == 0){
+            this->cerrarSubasta.notify_all();
+        }
 }
 int monitorSubasta::numPujadores(){
 	unique_lock<mutex> lck(this->exclusionDatos);
@@ -128,7 +131,9 @@ bool monitorSubasta::CerrarSalon(){
 //Despierta el proceso para que pueda cerrar el socket
 void monitorSubasta::finSubasta(){
 	unique_lock<mutex> lck(this->exclusionDatos);
-	this->cerrarSubasta.wait(lck);
+        while(this->pujadoresObservando>0){
+            this->cerrarSubasta.wait(lck);
+        }
 }
 
 bool monitorSubasta::comenzarSubastas(){
