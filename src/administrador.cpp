@@ -11,6 +11,7 @@
 #include "mSubasta.hpp"
 #include "subastador.cpp"
 #include "gestorValla.cpp"
+#include "Socket.hpp"
 using namespace std;
 
   
@@ -21,7 +22,7 @@ void mostrarEstado(MonitorValla* m, int& nPeticiones, double& tiempoEstimado){
   int tiempoC;
   m->informacion(imgTot,tiempoM,tiempoC,imgCol);
   nPeticiones = imgCol;
-  tiempoEstimado = (tiempoC-tiempoM)/1000;
+  tiempoEstimado = (tiempoC-tiempoM);
 }
 
 void mostrarHistorico(MonitorValla* m, int& nPeticiones, double& tiempoTotal, double& tiempoMedio){
@@ -31,7 +32,8 @@ void mostrarHistorico(MonitorValla* m, int& nPeticiones, double& tiempoTotal, do
   int tiempoC;
   m->informacion(imgTot,tiempoM,tiempoC,imgCol);
   nPeticiones = imgTot;
-  tiempoMedio = nPeticiones/tiempoTotal;
+  tiempoTotal = tiempoM;
+  tiempoMedio = tiempoTotal/nPeticiones;
 }
 
 int main(int argc, char * argv[]){
@@ -54,7 +56,7 @@ int main(int argc, char * argv[]){
   MonitorValla vallas;
   monitorSubasta subasta;
   char *direccion ="http://i.imgur.com/evzIQVF.jpg";
-  Anuncio a(direccion, 3000);
+  Anuncio a(direccion, 3);
   vallas.encolar(a);
   vallas.encolar(a);
   vallas.encolar(a);
@@ -71,6 +73,8 @@ int main(int argc, char * argv[]){
   int n;
   double t;
   double m;
+  Socket socket("localhost",puertoSubasta);
+  int socket_fd;
   while(!fin){
     cout<<"\nInstrucciones del administrador:\n";
     cout<<"1-> Mostrar estado de las vallas\n"
@@ -92,7 +96,16 @@ int main(int argc, char * argv[]){
               break;
       case 3:
               cout<<"Esperando terminación ordenada..."<<endl;
+              //Cierro la subasta y espero.
+              subasta.CerrarSalon();
+              socket_fd=socket.Connect();
+              socket.Close(socket_fd);
+              thMS.join();
+              
+              //Una vez cerrada la subasta, cierro las vallas.
               vallas.finServicio();
+              thMV.join();
+
               fin = true;
               break;
       default:
@@ -100,9 +113,6 @@ int main(int argc, char * argv[]){
     }
   }
 
-  
-  thMV.join();
-  thMS.join();
   
   cout<<"Fin correcto del servicio"<<endl;
   
