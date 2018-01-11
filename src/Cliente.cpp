@@ -195,9 +195,10 @@ int main(int argc, char *argv[]) {
 				//Enviar url
 				//esperar ACK
 				do{
-					// cout << "Escriba la url valida de la imagen\n";
-					// cin >> url
-					socket.Send(socket_fd,"http:");
+					cout << "Escriba la url valida de la imagen\n";
+                                        string url;
+					cin >> url;
+					socket.Send(socket_fd,url);
 					socket.Recv(socket_fd,nueva_puja,MESSAGE_SIZE); 
 					cout << nueva_puja << endl;
 					cout << "se ha enviado algo\n";
