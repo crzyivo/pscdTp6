@@ -128,7 +128,7 @@ bool monitorSubasta::CerrarSalon(){
 //Despierta el proceso para que pueda cerrar el socket
 void monitorSubasta::finSubasta(){
 	unique_lock<mutex> lck(this->exclusionDatos);
-	
+	this->cerrarSubasta.wait(lck);
 }
 
 bool monitorSubasta::comenzarSubastas(){
@@ -147,4 +147,9 @@ int monitorSubasta::nMensaje(){
 bool monitorSubasta::numMenAceptado(int numero){
 	unique_lock<mutex> lck(this->exclusionDatos);
 	return this->numMensaje <= numero;
+}
+
+void monitorSubasta::CerrarSocket(){
+	unique_lock<mutex> lck(this->exclusionDatos);
+	this->cerrarSubasta.signal();
 }

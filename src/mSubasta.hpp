@@ -36,6 +36,7 @@ private:
 	condition_variable envioPujas;	
 	condition_variable comenzarS;
 	condition_variable esperarClientes;
+	condition_variable cerrarSubasta;
 public:
 	monitorSubasta();
 	~monitorSubasta();
@@ -73,6 +74,7 @@ public:
 	bool comenzarSubastas();
 	int nMensaje();
 	bool numMenAceptado(int numero);
+	void CerrarSocket();
 
 };
 

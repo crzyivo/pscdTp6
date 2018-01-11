@@ -153,19 +153,19 @@ int runSubastador(int puertoSubasta, monitorSubasta *mSubas, MonitorValla *mV){
         cout<<"Puerto de la subasta "<< puertoSubasta << endl;
 	
 	int sockSubasta = subasta.Bind();
-        if (sockSubasta == -1) {
+	if (sockSubasta == -1) {
         cerr << "Error en el bind: " << strerror(errno) << endl;
         exit(1);
-        }
+	}
 	int error = subasta.Listen(maxNumCLientes);
-        if(error == -1) {
+	if(error == -1) {
         cerr << "Error en el listen: " << strerror(errno) << endl;
         // Cerramos el socket
         subasta.Close(sockSubasta);
         exit(1);
-        }
-		thread com(&controlSubasta, mSubas);
-		com.detach();
+	}
+	thread com(&controlSubasta, mSubas);
+	com.detach();
 	while(mSubas->SalonAbierto()){
 		//Abrir Salon
 		int cliente = subasta.Accept();
