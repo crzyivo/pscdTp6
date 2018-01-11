@@ -91,6 +91,7 @@ int main(int argc, char * argv[]){
               cout<<"Tiempo medio de los anuncios: "<<m<<" segundos."<<endl;
               break;
       case 3:
+              cout<<"Esperando terminación ordenada..."<<endl;
               vallas.finServicio();
               fin = true;
               break;
