@@ -29,7 +29,7 @@ private:
 public:
 	Anuncio() = default;
 	//Constructor de anuncio
-	Anuncio(char nuevaURL[], int nuevoTiempo);
+	Anuncio(const char nuevaURL[], int nuevoTiempo);
 	//Destructor de anuncio
 	~Anuncio();
 	//devuelve el tiempo que se va a mostrar el anuncio
