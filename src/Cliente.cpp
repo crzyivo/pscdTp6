@@ -117,15 +117,16 @@ int main(int argc, char *argv[]) {
 	
 	cout << nueva_puja << endl;
 	bool salirSubastas = false;
+	bool aceptarSiguiente = true;
 	while(!salirSubastas){
-		bool aceptarSiguiente = true;
+		
 		if(!automatic){
 			cout << "escriba a,p,sp o ss para:\na -> para aceptar puja\np -> pasar puja\nsp-> salir de la puja actual y esperar una nueva\nss -> finalizar subasta\n";
 			cin >> puja;
 			cout << "\033[32m" + puja + "\033[0m\n";
-		}else if(!aceptarSiguiente){
+		}else if(!aceptarSiguiente && automatic){
 			puja = "sp";
-		}else{
+		}else if(automatic){
 			int noPujar = rand() %100;
 			if(noPujar < 60){
 				puja = "a";
