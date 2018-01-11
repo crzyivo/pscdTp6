@@ -8,7 +8,7 @@
 
 
 //Constructor de anuncio. El tiempo debe expresarse en segundos
-Anuncio::Anuncio(char nuevaURL[], int nuevoTiempo) {
+Anuncio::Anuncio(const char nuevaURL[], int nuevoTiempo) {
     if (strlen(nuevaURL) < MAX_LONG_URL) {
        strcpy(URL, nuevaURL);
        tiempo = nuevoTiempo;

@@ -151,6 +151,8 @@ int main(int argc, char *argv[]) {
 				//Enviar url
 				//esperar ACK
 				do{
+					// cout << "Escriba la url valida de la imagen\n";
+					// cin >> url
 					socket.Send(socket_fd,"http:");
 					socket.Recv(socket_fd,nueva_puja,MESSAGE_SIZE); 
 					cout << nueva_puja << endl;
@@ -165,7 +167,7 @@ int main(int argc, char *argv[]) {
 		//Si he salido de la puja
 		//Si he salido de la subasta
 		
-		if("La subasta esta mas adelantada. Porfavor, espere una nueva subasta\n"== nueva_puja 
+		if("La subasta esta mas adelantada. Por favor, espere una nueva subasta\n"== nueva_puja 
 			||"Minimo no alcanzado\n" == nueva_puja
 			|| "Saliendo de subasta actual, esperando a que termine\n" == nueva_puja ){
 		//REVISAR GUARDA!!!!!!!!!!
@@ -186,6 +188,6 @@ int main(int argc, char *argv[]) {
 	if(error_code == -1){
 		cerr << "Error cerrando el socket: " << strerror(errno) << endl;
 	}
-	std::this_thread::sleep_for(std::chrono::seconds(2));
+	cout << "Gracias por asistir a nuestra subasta. Vuelva cuando quiera\n";
 	
 }
