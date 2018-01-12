@@ -38,21 +38,20 @@ void mostrarHistorico(MonitorValla* m, int& nPeticiones, double& tiempoTotal, do
 
 int main(int argc, char * argv[]){
   int puertoSubasta = 32005;
-//   if(argc >1){	//Inicializa con Parametros
-// 		for (int i = 1; i< argc; i++){
-// 			if(*argv[i]++ == '-'){
-// 				if(*argv[i] == 'p'){		//numero de vueltas
-// 					if(*++argv[i] == '\0'){i++;/*saltar espacio en blanco*/}
-// 					puertoSubasta = atoi(argv[i]);
-// 				}else{
-// 					cout << "Uso: [-p<puerto>] [-d<direccion>]\n";
-// 					cout << "\t-p<puerto>: puerto del servidor\n";
-// 					exit(1);
-// 				}
-// 			}
-// 		}
-// 	}
-  //Monitores
+   if(argc >1){	//Inicializa con Parametros
+ 		for (int i = 1; i< argc; i++){
+ 			if(*argv[i]++ == '-'){
+ 				if(*argv[i] == 'p'){		//numero de vueltas
+ 					if(*++argv[i] == '\0'){i++;/*saltar espacio en blanco*/}
+ 					puertoSubasta = atoi(argv[i]);
+ 				}else{
+ 					cout << "Uso: [-p<puerto>] [-d<direccion>]\n";
+ 					cout << "\t-p<puerto>: puerto del servidor\n";
+ 					exit(1);
+ 				}
+ 			}
+ 		}
+ 	}//Monitores
   MonitorValla vallas;
   monitorSubasta subasta;
   char *direccion ="http://i.imgur.com/evzIQVF.jpg";

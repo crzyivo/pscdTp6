@@ -140,6 +140,7 @@ void subastaCliente(Socket *subasta, int cliente , monitorSubasta * mSubas,Monit
 			}
 		}
 	}
+	subasta->Send(cliente, "0;Desconectado del servidor\n");
 	int error = subasta->Close(cliente);
 	if(error < 0){
 		printf("error al desconectar cliente\n");

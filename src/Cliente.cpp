@@ -152,10 +152,14 @@ int main(int argc, char *argv[]) {
 		
 		read_bytes = socket.Recv(socket_fd,nueva_puja,MESSAGE_SIZE); 
 		numMensaje = strtok(strdup(nueva_puja.c_str()), ";");
+		if(numMensaje == "0"){
+			salirSubastas = true;
+		}
+
 		nueva_puja = strtok(NULL, ";");		//TRATAR MENSAJES DE ENTRADA DE LA SUBASTA
 		cout << nueva_puja;
 		string gan = strtok(strdup(nueva_puja.c_str()), " ");
-		if(automatic){
+		if(automatic && numMensaje != "0"){
 			string seguir = strtok(strdup(nueva_puja.c_str()), " ");
 			int pujadores;
 			int pujaActual;
@@ -220,14 +224,18 @@ int main(int argc, char *argv[]) {
 		cerr << "\033[34m" + nueva_puja + "\033[0m\n";
 		if(nueva_puja != "Pujador" && nueva_puja != "Hay" && nueva_puja !="Saliendo"){
 		//REVISAR GUARDA!!!!!!!!!!
-			cout << "Estoy esperando nueva subasta\n";
-			read_bytes = socket.Recv(socket_fd,nueva_puja,MESSAGE_SIZE); 
-			cout << "\033[34m" + nueva_puja + "\033[0m\n";
-			numMensaje = strtok(strdup(nueva_puja.c_str()), ";");
-			nueva_puja = strtok(NULL, ";");
-						
-			if(read_bytes > 0){
-				cout << nueva_puja;
+		if(numMensaje != "0"){
+				cout << "Estoy esperando nueva subasta\n";
+				read_bytes = socket.Recv(socket_fd,nueva_puja,MESSAGE_SIZE); 
+				cout << "\033[34m" + nueva_puja + "\033[0m\n";
+				numMensaje = strtok(strdup(nueva_puja.c_str()), ";");
+				nueva_puja = strtok(NULL, ";");
+				if(numMensaje == "0"){
+					salirSubastas = true;
+				}
+				if(read_bytes > 0){
+					cout << nueva_puja;
+				}
 			}
 		}
 	}
