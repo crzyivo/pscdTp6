@@ -19,7 +19,9 @@
 #include "Socket.hpp"
 using namespace std;
 
-  
+/*
+ * Muestra la información actual del sistema
+ */
 void mostrarEstado(MonitorValla* m, int& nPeticiones, double& tiempoEstimado){
   int imgTot;
   int imgCol;
@@ -30,6 +32,9 @@ void mostrarEstado(MonitorValla* m, int& nPeticiones, double& tiempoEstimado){
   tiempoEstimado = (tiempoC-tiempoM);
 }
 
+/*
+ * Muestra el histórico del sistema
+ */
 void mostrarHistorico(MonitorValla* m, int& nPeticiones, double& tiempoTotal, double& tiempoMedio){
   int imgTot;
   int imgCol;
@@ -41,6 +46,11 @@ void mostrarHistorico(MonitorValla* m, int& nPeticiones, double& tiempoTotal, do
   tiempoMedio = tiempoTotal/nPeticiones;
 }
 
+/*
+ * Lanza los hilos correspondientes al subastador y al gestor de vallas. Con la ayuda de un menú
+ * mostrará por pantalla el estado actual del sistema, el historico del sistema o apagará el
+ * sistema.
+ */
 int main(int argc, char * argv[]){
   int puertoSubasta = 32005;
   bool modoTest = false;
