@@ -37,7 +37,7 @@ int main(int argc, char *argv[]) {
 	// sigaction(SIGALRM, &acti, &def);
 	bool automatic = false;
 	int maxOferta = 50;
-	srand(time(0));
+	srand(time(0)+getpid());
 	const string MENS_FIN("END OF SERVICE");
 	// Dirección y número donde escucha el proceso servidor
 	string SERVER_ADDRESS = "localhost";
@@ -46,19 +46,20 @@ int main(int argc, char *argv[]) {
 		if(argc >1){	//Inicializa con Parametros
 		for (int i = 1; i< argc; i++){
 			if(*argv[i]++ == '-'){
-				if(*argv[i] == 'p'){		//numero de vueltas
+				if(*argv[i] == 'p'){		//Puerto del servidor
 					if(*++argv[i] == '\0'){i++;/*saltar espacio en blanco*/}
 					 SERVER_PORT = argv[i];
-				}else if(*argv[i] == 'd'){	//mnumero surtidores
+				}else if(*argv[i] == 'd'){	//direccion del servidor
 					if(*++argv[i] == '\0'){i++; /*saltar espacio en blanco*/}
 					SERVER_ADDRESS = argv[i];
 				}else if(*argv[i] == 'a'){	//Modo automatico
 					automatic = true;
 					maxOferta = rand() % 150;
 				}else{
-					cout << "Uso: [-p<puerto>] [-d<direccion>]\n";
+					cout << "Uso: [-p<puerto>] [-d<direccion>] [-a]\n";
 					cout << "\t-p<puerto>: puerto del servidor\n";
 					cout << "\t-d<direccion>: direccion servidor\n";
+                                        cout << "\t-a: flag de cliente automatico\n";
 					exit(1);
 				}
 			}
