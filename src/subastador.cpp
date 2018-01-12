@@ -1,3 +1,9 @@
+/*
+ * Autores: Lafuente, Víctor M.; Escuín González, Iván; Morón Vidal, Elena
+ * NIP: 747325; 684146; 739324
+ * Fecha: enero 2018
+ */
+
 #include <iostream>
 #include <cstdlib>
 #include <string>

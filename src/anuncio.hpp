@@ -1,6 +1,6 @@
 /*
- * Autores: Morón Vidal, Elena; Lafuente, Víctor M.; Escuín González, Iván
- * NIP: 739324; 747325; 684146
+ * Autores: Lafuente, Víctor M.; Escuín González, Iván; Morón Vidal, Elena
+ * NIP: 747325; 684146; 739324
  * Fecha: enero 2018
  */
 
