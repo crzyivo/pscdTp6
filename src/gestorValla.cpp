@@ -31,8 +31,8 @@ const int NUM_VALLAS = 2;               //Número de vallas que se ofertan
  * Dada una valla y un gestor descarga las imágenes que se obtienen de los anuncios 
  * encolados y las muestra en valla
  */
-void mostrarImagen (Valla v, const int numValla, MonitorValla* gestor, const int& anchuraV) {
-   
+void mostrarImagen (Valla v, const int numValla, MonitorValla* gestor) {
+
     int numImagen = 1;                      //Recuento de imágenes que ha mostrado este proceso
     Anuncio anuncio;                        //Variable que nos permite guardar el anuncio
     char nombreVentana[MAX_LONG_NOMBRE_IMG];    //Nombre de la ventana que representa la valla
@@ -44,7 +44,7 @@ void mostrarImagen (Valla v, const int numValla, MonitorValla* gestor, const int
     
     CImgDisplay vallaConImg(v.infoAnchura(),v.infoAltura(),nombreVentana);
     CImg<unsigned char> visu(400,400,1,3,0);
-
+    
     while (gestor->obtenerAnuncio(anuncio)) {
        
         char numImg[30];
@@ -53,9 +53,8 @@ void mostrarImagen (Valla v, const int numValla, MonitorValla* gestor, const int
         char nombreImg[MAX_LONG_NOMBRE_IMG];    //Nombre que tendrá la imagen que se descargue
 
         strcpy(nombreImg, "IMG");               
-        strcat(nombreImg, numV);   
-        strcat(nombreImg, numImg);
-        strcat(nombreImg, ".jpg");              //nombreImg = IMG*numValla**numImg*.jpg
+        strcat(nombreImg, numV);
+        strcat(nombreImg, ".jpg");              //nombreImg = IMG*numValla*.jpg
 
         // Creamos el objeto para descargar imágenes
         ImageDownloader downloader;
@@ -65,7 +64,7 @@ void mostrarImagen (Valla v, const int numValla, MonitorValla* gestor, const int
         // Creamos una valla publicitaria con una imagen
         CImg<unsigned char> img_principal(nombreImg);
         vallaConImg.resize(v.infoAnchura(),v.infoAltura());
-        vallaConImg.move((numValla-1)*(anchuraV+50), numValla-1);
+        vallaConImg.move((numValla-1)*(v.infoAnchura()+50), numValla-1);
 
         // Mostrar imagen
         vallaConImg.display(img_principal);
@@ -88,10 +87,11 @@ void runGestorValla(MonitorValla* gestor) {
 
     for (int i = 0; i < NUM_VALLAS; i++) {
         vallasDisponibles[i]= Valla(VALLA_HEIGHT, VALLA_WIDTH);
-        mostrar[i] = thread (&mostrarImagen, vallasDisponibles[i] , i+1, gestor, VALLA_WIDTH);
+        mostrar[i] = thread (&mostrarImagen, vallasDisponibles[i] , i+1, gestor);
     }
-
+	
     for (int i = 0; i < NUM_VALLAS; i++) {
-        mostrar[i].join();
+    	mostrar[i].join();
     }
+    
 }
