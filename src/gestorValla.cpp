@@ -31,7 +31,7 @@ const int NUM_VALLAS = 2;               //Número de vallas que se ofertan
  * Dada una valla y un gestor descarga las imágenes que se obtienen de los anuncios 
  * encolados y las muestra en valla
  */
-void mostrarImagen (Valla v, const int numValla, MonitorValla* gestor) {
+void mostrarImagen (Valla v, const int numValla, MonitorValla* gestor, const int& anchuraV) {
    
     int numImagen = 1;                      //Recuento de imágenes que ha mostrado este proceso
     Anuncio anuncio;                        //Variable que nos permite guardar el anuncio
@@ -65,15 +65,14 @@ void mostrarImagen (Valla v, const int numValla, MonitorValla* gestor) {
         // Creamos una valla publicitaria con una imagen
         CImg<unsigned char> img_principal(nombreImg);
         vallaConImg.resize(v.infoAnchura(),v.infoAltura());
-        vallaConImg.move((numValla-1)*800, (numValla-1)*800);
+        vallaConImg.move((numValla-1)*(anchuraV+50), numValla-1);
 
         // Mostrar imagen
         vallaConImg.display(img_principal);
         this_thread::sleep_for(chrono::seconds(anuncio.infoTiempo()));
-        vallaConImg.display(visu);
+        vallaConImg.display(visu);          //Ventana en negro (sin mostrar imagen)
         numImagen++;
     }
-    //while(true){};
 }
 
 /*
@@ -89,7 +88,7 @@ void runGestorValla(MonitorValla* gestor) {
 
     for (int i = 0; i < NUM_VALLAS; i++) {
         vallasDisponibles[i]= Valla(VALLA_HEIGHT, VALLA_WIDTH);
-        mostrar[i] = thread (&mostrarImagen, vallasDisponibles[i] , i+1, gestor);
+        mostrar[i] = thread (&mostrarImagen, vallasDisponibles[i] , i+1, gestor, VALLA_WIDTH);
     }
 
     for (int i = 0; i < NUM_VALLAS; i++) {
