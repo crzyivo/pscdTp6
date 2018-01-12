@@ -35,7 +35,6 @@ int monitorSubasta::numPujadores(){
 
 bool monitorSubasta::iniciarNuevaSubasta(int tiempoValla){
 	unique_lock<mutex> lck(this->exclusionDatos);
-	if(!this->fin_Subastas && !this->aceptandoPujas){
 		this->TiempoAnuncio = tiempoValla;
 		this->pujadorMasAlto = -1; //-1 = no hay pujador
 		this->posibleGanador = -1;
@@ -44,10 +43,8 @@ bool monitorSubasta::iniciarNuevaSubasta(int tiempoValla){
 		this->pujaMinima = this->pujaMasAlta;
 		this->numPujas = 0;
 		this->numPujasSend = 0;
-		this->aceptandoPujas = true;
 		this->numMensaje++;
 		this->comenzarS.notify_all();
-	}
 }
 
 int monitorSubasta::tiempoSubas(){
@@ -62,7 +59,11 @@ int monitorSubasta::tiempoSubas(){
 int monitorSubasta::comenzarSubasta(){
 	unique_lock<mutex> lck(this->exclusionDatos);
 	this->comenzarS.wait(lck);
-	return pujaMinima;
+	if(this->aceptandoPujas){
+		return pujaMinima;
+	}else{
+		return -1;
+	}
 }
 //reactualiza la proxima minima puja que se aceptara
 void monitorSubasta::pujar(string mensaje, int cliente){
@@ -127,19 +128,29 @@ bool monitorSubasta::SubastaEnCurso(){
 bool monitorSubasta::CerrarSalon(){
 	unique_lock<mutex> lck(this->exclusionDatos);
 	this->fin_Subastas = true;
+	if(!this->aceptandoPujas){
+		this->comenzarS.notify_all();
+	}
+	this->esperarClientes.notify_all();
+
+	
 }
 //Despierta el proceso para que pueda cerrar el socket
 void monitorSubasta::finSubasta(){
 	unique_lock<mutex> lck(this->exclusionDatos);
         while(this->pujadoresObservando>0){
             this->cerrarSubasta.wait(lck);
+			this->esperarClientes.notify_all();
         }
 }
 
 bool monitorSubasta::comenzarSubastas(){
 	unique_lock<mutex> lck(this->exclusionDatos);
-	while(this->pujadoresObservando <1){
+	if(this->pujadoresObservando <1){
 		this->esperarClientes.wait(lck);
+	}
+	if(this->pujadoresObservando >0){ //Si estoy despierto porque hay pujadores
+		this->aceptandoPujas = true;
 	}
 	return this->pujadoresObservando > 0;
 }

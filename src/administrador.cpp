@@ -54,14 +54,14 @@ int main(int argc, char * argv[]){
  	}//Monitores
   MonitorValla vallas;
   monitorSubasta subasta;
-  char *direccion ="http://i.imgur.com/evzIQVF.jpg";
+/*  char *direccion ="http://i.imgur.com/evzIQVF.jpg";
   Anuncio a(direccion, 3);
   vallas.encolar(a);
   vallas.encolar(a);
   vallas.encolar(a);
   vallas.encolar(a);
   vallas.encolar(a);
-  vallas.encolar(a);
+  vallas.encolar(a);*/
   
   //Inicio el gestor de vallas y de la subasta.
   thread thMV(&runGestorValla,&vallas);

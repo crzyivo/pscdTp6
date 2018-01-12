@@ -33,10 +33,10 @@ private:
 	bool aceptandoPujas;
 	bool fin_Subastas;	//True si y solo si no salen mas subastas 
 	mutex exclusionDatos;        
-	condition_variable envioPujas;	
-	condition_variable comenzarS;
-	condition_variable esperarClientes;
-	condition_variable cerrarSubasta;
+	condition_variable envioPujas;	//Esperar notificacion de envio
+	condition_variable comenzarS;	//ComienzaSubasta
+	condition_variable esperarClientes;	//Espera hasta que haya almenos 1 cliente o fin servicio
+	condition_variable cerrarSubasta;	//Espera a que no queden clientes para cerrar el socket
 public:
 	monitorSubasta();
 	~monitorSubasta();

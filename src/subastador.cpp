@@ -23,26 +23,29 @@
  **********************/ 
 //monitorSubasta mSubas;
 const int maxNumCLientes = 35;
-const int tiempoEntrePujas = 10000; //Tiempo que ha de esperar a que los interesados contesten
-const int MAX_TIEMPO_VALLA = 30;
-const int MIN_TIEMPO_VALLA = 2;
+const int tiempoEntrePujas = 3000; //Tiempo que ha de esperar a que los interesados contesten
+const int MAX_TIEMPO_VALLA = 50;
+const int MIN_TIEMPO_VALLA = 20;
 int puertoSubasta = 32005;
 
 void controlSubasta(monitorSubasta *mSubas){
 	srand(time(NULL));
-	while(mSubas->comenzarSubastas() && mSubas->SalonAbierto()){
+	while(mSubas->SalonAbierto()){
 		//NO EMPEZAR CON 0 Clientes
-		cout << "\033[1;34mSalon abierto. Esperando a que se conecten todos los clientes interesados\033[0m\n";
-		this_thread :: sleep_for(chrono :: milliseconds(tiempoEntrePujas));
-		mSubas->iniciarNuevaSubasta(rand()%MAX_TIEMPO_VALLA+MIN_TIEMPO_VALLA); 
-		while(mSubas->numPujadores() > 0 && mSubas->SubastaEnCurso()){
-			cerr << "\033[31m Esperar \033[0m\n";
+		if(mSubas->comenzarSubastas()){
+			cout << "\033[1;34mSalon abierto. Esperando a que se conecten todos los clientes interesados\033[0m\n";
 			this_thread :: sleep_for(chrono :: milliseconds(tiempoEntrePujas));
-			mSubas->enviarPuja();
-			cerr << "\033[32m Todos Avisados \033[0m\n";
+			mSubas->iniciarNuevaSubasta(rand()%MAX_TIEMPO_VALLA+MIN_TIEMPO_VALLA); 
+			while(mSubas->numPujadores() > 0 && mSubas->SubastaEnCurso()){
+				cerr << "\033[31m Esperar \033[0m\n";
+				this_thread :: sleep_for(chrono :: milliseconds(tiempoEntrePujas));
+				mSubas->enviarPuja();
+				cerr << "\033[32m Todos Avisados \033[0m\n";
+			}
 		}
 	}
-	mSubas->CerrarSocket();
+	//mSubas->CerrarSocket();
+	cerr << "\033[31mSe cerrara el socket\033[0m\n";
 }
 
 
@@ -59,9 +62,15 @@ void subastaCliente(Socket *subasta, int cliente , monitorSubasta * mSubas,Monit
 			//esperar a que se dé la condición de iniciar subasta
 			int precioInicial = mSubas->comenzarSubasta();	//Bloqueante. devuelve precio de salida de subasta
 			string mensajeIn = "";	//Mensajes desde cliente
-			int t = mSubas->tiempoSubas();
-			string mensajeOut = to_string(mSubas->nMensaje()) +";Comienza la subasta en " + to_string(precioInicial) + " para un tiempo " + to_string(t) +"\n"; //mensajes para cliente
 			bool seguirPuja = true;	//true = Cliente esta interesado en observar constantemente el estado de la subasta actual
+			int t; //Tiempo a subasta
+			string mensajeOut;
+			if(seguirPuja<0){
+				seguirPuja = false;
+			}else{
+				t = mSubas->tiempoSubas();
+				mensajeOut = to_string(mSubas->nMensaje()) +";Comienza la subasta en " + to_string(precioInicial) + " para un tiempo " + to_string(t) +"\n"; //mensajes para cliente
+			}
 			//Bucle de subasta
 			//Cada iteracion corresponde al envio del precio actual, recibir y tratar mensajes de pujadores
 			while(seguirPuja && mSubas->SubastaEnCurso()){
@@ -177,10 +186,11 @@ int runSubastador(int puertoSubasta, monitorSubasta *mSubas, MonitorValla *mV){
 		// esperar a que puedan entrar más clientes a Subasta
 
 	}
-	cout << "bye bye\n";
+	subasta.Close(cliente);
+	cerr << "No se aceptan mas clientes \n";
 	mSubas->finSubasta();
 	subasta.Close(sockSubasta);
 	
-	
+	cout << "bye bye\n";
 	return 0;
 }
