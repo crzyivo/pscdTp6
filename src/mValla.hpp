@@ -33,8 +33,8 @@ private:
 	int tiempoMostrado;			//Tiempo total (en segundos) que se han mostrado anuncios
 	int imagenesMostradas;		//Número de imágenes que han sido mostradas
 	bool finPeticiones;			//Cierto si y solo si ya no se van a encolar más anuncios
-	recursive_mutex mtx;        
-	condition_variable_any cv;	
+	mutex mtx;        
+	condition_variable cv;	
 public:
 	MonitorValla();
 	~MonitorValla();

@@ -16,7 +16,7 @@ MonitorValla::~MonitorValla() {
 
 //Añade a en como último elemento de la cola esperando
 void MonitorValla::encolar(Anuncio& a) {
-    unique_lock<recursive_mutex> lck(mtx);
+    unique_lock<mutex> lck(mtx);
 
     esperando.push(a);
     tiempoContratado += a.infoTiempo();
@@ -27,7 +27,7 @@ void MonitorValla::encolar(Anuncio& a) {
 //a anun el anuncio extraído. Devuelve cierto si y solo si 
 //ha desencolado el anuncio 
 bool MonitorValla::obtenerAnuncio(Anuncio& anun) {
-    unique_lock<recursive_mutex> lck(mtx);
+    unique_lock<mutex> lck(mtx);
     while (esperando.size() < 1 && !finPeticiones) { //Tamaño 0 y la subasta sigue activa
         cv.wait(lck);
     }
@@ -44,14 +44,14 @@ bool MonitorValla::obtenerAnuncio(Anuncio& anun) {
 
 //Devuelve el número de elementos que hay esperando
 int MonitorValla::numEnEspera() {
-    unique_lock<recursive_mutex> lck(mtx);
+    unique_lock<mutex> lck(mtx);
 
     return esperando.size();
 }
 
 //Asocia a los parámetros los valores que tienen en el momento de consultarse
 void  MonitorValla::informacion (int& imgMost, int& tpoMost, int& tpoCont, int& nPet) {
-    unique_lock<recursive_mutex> lck(mtx);
+    unique_lock<mutex> lck(mtx);
    
     imgMost = imagenesMostradas;
     tpoMost = tiempoMostrado;
@@ -61,7 +61,7 @@ void  MonitorValla::informacion (int& imgMost, int& tpoMost, int& tpoCont, int& 
 
 //FinPeticiones = true
 void MonitorValla::finServicio() {
-    unique_lock<recursive_mutex> lck(mtx);
+    unique_lock<mutex> lck(mtx);
     
     finPeticiones = true;
     cv.notify_all();
