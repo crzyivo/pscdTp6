@@ -1,61 +1,83 @@
 
+# ######## #
+# COMANDOS #
+# ######## #
+RM = rm -f # Comando de limpieza
+CC = g++ # Comando de compilacion
+
+# ######################## # 
+# VARIABLES GLOBALES       #
+# Definimos:               #
+#   * Librería de sockets  # 
+#   * Cliente              #
+#   * Servidor             #
+#   * ServidorMulticliente #
+# ######################## #
+SOCKET=Socket
+CLIENTE=Cliente
+
+ADMIN=administrador
+
+SUBASTADOR=subastador
+MONSUBASTA = mSubasta
+
+GESTVALLAS=gestorValla
+ANUNCIO=anuncio
+VALLA=valla
+MONVALLA=mValla
+CIMG = CImg.h
+imageDownloader=ImageDownloader
 
 # #################### #
 # FLAGS DE COMPILACION #
 # #################### #
-CPPFLAGS=-I. -I/usr/local/include -O2 -std=c++11
+CPPFLAGS=-I./src -I/usr/local/include -O2 -std=c++11 -pthread
 LDFLAGS=-L/usr/X11R6/lib -L/usr/local/lib -lm -pthread -lcurl -lX11  
 SOCKETSFLAGS=-lsocket -lnsl # Flags linkado sockets (Solaris SunOS)
 
-all: administrador cliente
+all: ${ADMIN} ${CLIENTE}
 
 #Subastador
-subastador: subastador.cpp Socket.o mSubasta.o anuncio.o mValla.o
-	g++ -std=c++11 -pthread -o subastador subastador.cpp Socket.o mSubasta.o anuncio.o mValla.o
-	
-subastador.o: subastador.cpp Socket.o mSubasta.o anuncio.o mValla.o
-	g++ -c -std=c++11 -pthread subastador.cpp Socket.o mSubasta.o anuncio.o mValla.o
+${SUBASTADOR}.o: ${SUBASTADOR}.cpp ${SOCKET}.o ${MONSUBASTA}.o ${ANUNCIO}.o ${MONVALLA}.o
+	${CC} -c ${CPPFLAGS} ${SUBASTADOR}.cpp ${SOCKET}.o ${MONSUBASTA}.o ${ANUNCIO}.o ${MONVALLA}.o
 
-Socket.o: Socket.cpp
-	g++ -c -std=c++11 Socket.cpp
+${SOCKET}.o: ${SOCKET}.cpp
+	${CC} -c ${CPPFLAGS} ${SOCKET}.cpp
 
-mSubasta.o: mSubasta.cpp
-	g++ -c -std=c++11 mSubasta.cpp
+${MONSUBASTA}.o: ${MONSUBASTA}.cpp
+	${CC} -c ${CPPFLAGS} ${MONSUBASTA}.cpp
 	
 #Cliente
 
-cliente: Cliente.cpp Socket.o 
-	g++ -std=c++11 -pthread -o cliente Cliente.cpp Socket.o 
+${CLIENTE}: ${CLIENTE}.cpp ${SOCKET}.o 
+	${CC} ${CPPFLAGS} -o ${CLIENTE} ${CLIENTE}.cpp ${SOCKET}.o #${SOCKETSFLAGS}
 
 #GestorValla
 
-gestor: gestorValla.o anuncio.o valla.o mValla.o ImageDownloader.o
-	g++ anuncio.o valla.o mValla.o ImageDownloader.o gestorValla.o -o gestor -L/usr/X11R6/lib -L/usr/local/lib -lm -pthread -lcurl -lX11
+${GESTVALLAS}.o:${GESTVALLAS}.cpp ${ANUNCIO}.o ${VALLA}.o ${MONVALLA}.o ${imageDownloader}.o
+	${CC} -c ${CPPFLAGS} ${GESTVALLAS}.cpp ${ANUNCIO}.o ${VALLA}.o ${MONVALLA}.o ${imageDownloader}.o
 
-gestorValla.o:gestorValla.cpp anuncio.o valla.o mValla.o ImageDownloader.o
-	g++ -c -pthread -I. -I/usr/local/include -O2 -std=c++11  -fmax-errors=1 -Werror gestorValla.cpp anuncio.o valla.o mValla.o ImageDownloader.o
+${ANUNCIO}.o: ${ANUNCIO}.hpp ${ANUNCIO}.cpp
+	${CC} -c ${CPPFLAGS} ${ANUNCIO}.cpp
 
-anuncio.o: anuncio.hpp anuncio.cpp
-	g++ -c -std=c++11 anuncio.cpp
+${VALLA}.o: ${VALLA}.hpp ${VALLA}.cpp
+	${CC} -c ${CPPFLAGS} ${VALLA}.cpp 
 
-valla.o: valla.cpp anuncio.o
-	g++ -c -std=c++11 valla.cpp anuncio.o
+${MONVALLA}.o:: ${MONVALLA}.hpp ${MONVALLA}.cpp
+	${CC} -c ${CPPFLAGS} ${MONVALLA}.cpp
 
-mValla.o:: mValla.cpp valla.o anuncio.o
-	g++ -c -std=c++11 mValla.cpp valla.o anuncio.o
-
-ImageDownloader.o: ImageDownloader.hpp ImageDownloader.cpp
-	g++ -c -I. -I/usr/local/include -O2 -std=c++11 -fmax-errors=1 -Werror ImageDownloader.cpp
+${imageDownloader}.o: ${imageDownloader}.hpp ${imageDownloader}.cpp
+	${CC} -c ${CPPFLAGS} ${imageDownloader}.cpp
 	
 #Administrador
 
-administrador: administrador.o mSubasta.o mValla.o valla.o anuncio.o Socket.o ImageDownloader.o
-	g++ administrador.o mValla.o valla.o anuncio.o Socket.o mSubasta.o ImageDownloader.o -o admin ${LDFLAGS} 
+${ADMIN}: ${ADMIN}.o ${MONSUBASTA}.o ${MONVALLA}.o ${VALLA}.o ${ANUNCIO}.o ${SOCKET}.o ${imageDownloader}.o
+	${CC} ${ADMIN}.o ${MONVALLA}.o ${VALLA}.o ${ANUNCIO}.o ${SOCKET}.o ${MONSUBASTA}.o ${imageDownloader}.o -o ${ADMIN} ${LDFLAGS} #${SOCKETSFLAGS}
 	
-administrador.o: administrador.cpp mSubasta.o mValla.o valla.o anuncio.o Socket.o 
-	g++ -c ${CPPFLAGS} administrador.cpp mSubasta.o mValla.o valla.o anuncio.o Socket.o 
+${ADMIN}.o: ${ADMIN}.cpp ${SUBASTADOR}.cpp ${GESTVALLAS}.cpp
+	${CC} -c ${CPPFLAGS} ${ADMIN}.cpp ${SUBASTADOR}.cpp ${GESTVALLAS}.cpp 
 	
 # LIMPIEZA
 clean:
-	rm -f *.o
-	rm -f *.jpg
+	${RM} *.o
+	${RM} *.jpg

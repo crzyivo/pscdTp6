@@ -38,30 +38,40 @@ void mostrarHistorico(MonitorValla* m, int& nPeticiones, double& tiempoTotal, do
 
 int main(int argc, char * argv[]){
   int puertoSubasta = 32005;
+  bool modoTest = false;
    if(argc >1){	//Inicializa con Parametros
  		for (int i = 1; i< argc; i++){
  			if(*argv[i]++ == '-'){
  				if(*argv[i] == 'p'){		//numero de vueltas
  					if(*++argv[i] == '\0'){i++;/*saltar espacio en blanco*/}
  					puertoSubasta = atoi(argv[i]);
- 				}else{
- 					cout << "Uso: [-p<puerto>] [-d<direccion>]\n";
+ 				}else if(*argv[i] == 't'){	//direccion del servidor
+					if(*++argv[i] == '\0'){i++; /*saltar espacio en blanco*/}
+					modoTest = true;
+        }else{
+ 					cout << "Uso: [-p<puerto>] [-t]\n";
  					cout << "\t-p<puerto>: puerto del servidor\n";
+          cout << "\t-t: modo test con anuncios ya cargados\n";
  					exit(1);
  				}
  			}
  		}
- 	}//Monitores
+ 	}
+ 	
+ 	//Monitores
   MonitorValla vallas;
   monitorSubasta subasta;
-  char *direccion ="http://i.imgur.com/evzIQVF.jpg";
-  Anuncio a(direccion, 3);
-  vallas.encolar(a);
-  vallas.encolar(a);
-  vallas.encolar(a);
-  vallas.encolar(a);
-  vallas.encolar(a);
-  vallas.encolar(a);
+  
+  if(modoTest){
+    char direccion[] ="http://i.imgur.com/evzIQVF.jpg";
+    Anuncio a(direccion, 3);
+    vallas.encolar(a);
+    vallas.encolar(a);
+    vallas.encolar(a);
+    vallas.encolar(a);
+    vallas.encolar(a);
+    vallas.encolar(a);
+  }
   
   //Inicio el gestor de vallas y de la subasta.
   thread thMV(&runGestorValla,&vallas);
@@ -84,26 +94,27 @@ int main(int argc, char * argv[]){
     switch(op){
       case 1:
               mostrarEstado(&vallas,n,t);
-              cout<<"Anuncios en espera: "<<n<<"."<<endl;
+              cout<<"\nAnuncios en espera: "<<n<<"."<<endl;
               cout<<"Tiempo actual contratado: "<<t<<" segundos."<<endl;
               break;
       case 2:
               mostrarHistorico(&vallas,n,t,m);
-              cout<<"Anuncios totales mostrados: "<<n<<"."<<endl;
+              cout<<"\nAnuncios totales mostrados: "<<n<<"."<<endl;
               cout<<"Tiempo total de anuncios: "<<t<<" segundos."<<endl;
               cout<<"Tiempo medio de los anuncios: "<<m<<" segundos."<<endl;
               break;
       case 3:
-              cout<<"Esperando terminación ordenada..."<<endl;
+              cout<<"\nEsperando terminación ordenada..."<<endl;
               //Cierro la subasta y espero.
               subasta.CerrarSalon();
               socket_fd=socket.Connect();
               socket.Close(socket_fd);
               thMS.join();
-              
+              cout<<"Subastas finalizadas"<<endl;
               //Una vez cerrada la subasta, cierro las vallas.
               vallas.finServicio();
               thMV.join();
+              cout<<"Vallas finalizadas"<<endl;
 
               fin = true;
               break;
@@ -113,7 +124,7 @@ int main(int argc, char * argv[]){
   }
 
   
-  cout<<"Fin correcto del servicio"<<endl;
+  cout<<"\nFin correcto del servicio"<<endl;
   
   return 0;
   
