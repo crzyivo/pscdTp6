@@ -31,5 +31,13 @@
 *.out
 *.app
 src/cliente
+src/Cliente
 src/subastador
+src/administrador
 src/gestor
+src/admin
+bin/*
+*.jpg
+
+# Imagenes
+src/*.jpg
