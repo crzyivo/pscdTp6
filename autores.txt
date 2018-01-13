@@ -5,11 +5,24 @@ NIP     NOMBRE
 747325  Victor M lafuente Ayuda
 ------------------------------------------
 
-Fecha          Tiempo         Autor        Concepto
----------   -------------   --------    ---------------
-22-12-17     11.00/12.30     684146     Reunion grupal
-22-12-17     11.00/12.30     739324     Reunion grupal
-22-12-17     11.00/12.30     747325     Reunion grupal
+Fecha          Tiempo         Autor        Concepto                         Horas computadas
+---------   -------------   --------    ---------------                    ------------------
+22-12-17     11.00/12.30     684146     Reunion grupal                              1h 30'
+22-12-17     11.00/12.30     739324     Reunion grupal                              1h 30'
+22-12-17     11.00/12.30     747325     Reunion grupal                              1h 30'
 
-26-12-17    13.00/14.00      747325     Modulo Subasta(primer boceto)
-02-01-18    15.30/16.20      747325     Modulo Subasta
+26-12-17    13.00/14.00      747325     Modulo Subasta(primer boceto)               1h
+02-01-18    15.30/16.20      747325     Modulo Subasta                              50'
+
+03-01-18    10.30/13:30      739324     Gestor de valla(comprensión problema
+										y diseño)									3h
+05-01-18	17.00/20.00		 73924		Gestor de valla(Implementación)				3h
+07-01-18	16.30/20.30		 739324		Gestor de valla(Implementación)				4h
+08-01-18	16.00/21.00		 739324		Gestor de valla(Implementación)				5h
+09-01-18	15.30/20.30		 739324		Gestor de valla(Depuración)					5h
+10-01-18	16.00/18.30		 739324		Gestor de valla(Test y mejora código)		2h
+12-01-18	17.00/18.00		 739324		Gestor de valla(Dar robustez)				1h
+12-01-18	18.00/20.00		 739324		Disenio.pdf									2h
+
+TOTAL horas computadas por autor:
+	739324 -> 26h 30' 

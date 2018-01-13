@@ -1,3 +1,9 @@
+/*
+ * Autores: Lafuente, Víctor M.; Escuín González, Iván; Morón Vidal, Elena
+ * NIP: 747325; 684146; 739324
+ * Fecha: enero 2018
+ */
+
 #ifndef MSUBASTA_HPP
 #define MSUBASTA_HPP
 
@@ -21,10 +27,10 @@ using namespace std;
 class monitorSubasta{
 private:
 	int TiempoAnuncio; //Tiempo en subasta de una valla
-	int numMensaje;
-	int pujadoresObservando;
-	int precioRequerido;	//Precio ha alcanzar
-	int pujadorMasAlto;	//Cliente que contiene la puja mas alta en tiempo T (no implica que sea unico)
+	int numMensaje;		
+	int pujadoresObservando;	//Número de pujadores que están esperando a que comience una subasta
+	int precioRequerido;	//Precio a alcanzar
+	int pujadorMasAlto;	//Cliente que tiene la puja mas alta en tiempo T (no implica que sea unico)
 	int posibleGanador; //Cliente con mayor puja en el tiempo T-1 (no implica que sea unico)
 	int pujaMasAlta;	//Puja mas alta recibida
 	int pujaMinima;	//Siguiente oferta
@@ -68,13 +74,19 @@ public:
 	bool CerrarSalon();
 	//Despierta el proceso para que pueda cerrar el socket
 	void finSubasta();
-	//
+	//Añade un nuevo pujador a la subasta
 	void anyadirPujador();
+	//Elimina un pujador de la subasta 
 	void quitarPujador();
+	//Devuelve el número de pujadores que están pujando
 	int numPujadores();
+	//Si hay pujadores suficientes, comienza una subasta
 	bool comenzarSubastas();
+	//
 	int nMensaje();
+	//
 	bool numMenAceptado(int numero);
+	//Cierra la subasta
 	void CerrarSocket();
 	void noAceptarPujas();
 	bool separaMensaje(string In, string &mensaje);

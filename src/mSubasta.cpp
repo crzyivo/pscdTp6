@@ -1,3 +1,9 @@
+/*
+ * Autores: Lafuente, Víctor M.; Escuín González, Iván; Morón Vidal, Elena
+ * NIP: 747325; 684146; 739324
+ * Fecha: enero 2018
+ */
+
 #include "mSubasta.hpp"
 
 monitorSubasta::monitorSubasta(){
@@ -16,11 +22,13 @@ monitorSubasta::monitorSubasta(){
 monitorSubasta::~monitorSubasta(){
 	
 }
+//Añade un nuevo pujador a la subasta
 void monitorSubasta::anyadirPujador(){
 	unique_lock<mutex> lck(this->exclusionDatos);
 	this->pujadoresObservando++;
 	if(this->pujadoresObservando == 1) this->esperarClientes.notify_all();
 }
+//Elimina un pujador de la subasta 
 void monitorSubasta::quitarPujador(){
 	unique_lock<mutex> lck(this->exclusionDatos);
 	this->pujadoresObservando--;
@@ -28,11 +36,13 @@ void monitorSubasta::quitarPujador(){
             this->cerrarSubasta.notify_all();
         }
 }
+
+//Devuelve el número de pujadores que están pujando
 int monitorSubasta::numPujadores(){
 	unique_lock<mutex> lck(this->exclusionDatos);
 	return this->pujadoresObservando;
 }
-
+//Inicializa una nueva subasta de tiempoValla 
 bool monitorSubasta::iniciarNuevaSubasta(int tiempoValla){
 	unique_lock<mutex> lck(this->exclusionDatos);
 		this->TiempoAnuncio = tiempoValla;
@@ -46,7 +56,7 @@ bool monitorSubasta::iniciarNuevaSubasta(int tiempoValla){
 		this->numMensaje++;
 		this->comenzarS.notify_all();
 }
-
+//Devuelve el tiempo que se subastara
 int monitorSubasta::tiempoSubas(){
 	unique_lock<mutex> lck(this->exclusionDatos);
 	if(this->aceptandoPujas){
@@ -76,7 +86,7 @@ void monitorSubasta::pujar(string mensaje, int cliente){
 		}
 	}
 }
-
+//Devuelve true si y solo si, se ha llegado al minino pedido
 bool monitorSubasta::SubastaAceptada(){
 	unique_lock<mutex> lck(this->exclusionDatos);
 	return this->pujaMasAlta >= this->precioRequerido;
@@ -144,7 +154,7 @@ void monitorSubasta::finSubasta(){
 			this->esperarClientes.notify_all();
         }
 }
-
+//Si hay pujadores suficientes, comienza una subasta
 bool monitorSubasta::comenzarSubastas(){
 	unique_lock<mutex> lck(this->exclusionDatos);
 	if(this->pujadoresObservando <1){
@@ -166,7 +176,7 @@ bool monitorSubasta::numMenAceptado(int numero){
 	return this->numMensaje <= numero;
 	cerr << "\033[31mNotificando quien Este esperando\033[0m\n";
 }
-
+//Cierra la subasta
 void monitorSubasta::CerrarSocket(){
 	unique_lock<mutex> lck(this->exclusionDatos);
 	this->cerrarSubasta.notify_all();
