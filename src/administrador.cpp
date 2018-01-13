@@ -37,6 +37,7 @@ void mostrarHistorico(MonitorValla* m, int& nPeticiones, double& tiempoTotal, do
 }
 
 int main(int argc, char * argv[]){
+ 
   int puertoSubasta = 32005;
   bool modoTest = false;
    if(argc >1){	//Inicializa con Parametros

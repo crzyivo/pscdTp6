@@ -14,6 +14,7 @@
 #include <condition_variable>
 #include <assert.h>
 #include <string>
+#include <cstring>
 
 using namespace std;
 
@@ -75,7 +76,8 @@ public:
 	int nMensaje();
 	bool numMenAceptado(int numero);
 	void CerrarSocket();
-
+	void noAceptarPujas();
+	bool separaMensaje(string In, string &mensaje);
 };
 
 #endif 
