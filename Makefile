@@ -1,4 +1,9 @@
 
+# Autores: Lafuente, Víctor M.; Escuín González, Iván; Morón Vidal, Elena
+# NIP: 747325; 684146; 739324
+# Fecha: enero 2018
+
+#Descomentar SOCKETFLAGS en Hendrix
 # ######## #
 # COMANDOS #
 # ######## #
@@ -41,7 +46,7 @@ all: ${ADMIN} ${CLIENTE} mv
 
 #Subastador
 ${SUBASTADOR}.o: ${SRCDIR}${SUBASTADOR}.cpp ${SOCKET}.o ${MONSUBASTA}.o ${ANUNCIO}.o ${MONVALLA}.o
-	${CC} -c ${CPPFLAGS} ${SRCDIR}${SUBASTADOR}.cpp ${SOCKET}.o ${MONSUBASTA}.o ${ANUNCIO}.o ${MONVALLA}.o
+	${CC} -c ${CPPFLAGS} ${SRCDIR}${SUBASTADOR}.cpp ${SOCKET}.o ${MONSUBASTA}.o ${ANUNCIO}.o ${MONVALLA}.o #${SOCKETSFLAGS}
 
 ${SOCKET}.o: ${SRCDIR} ${SRCDIR}${SOCKET}.cpp
 	${CC} -c ${CPPFLAGS} ${SRCDIR}${SOCKET}.cpp
@@ -57,7 +62,7 @@ ${CLIENTE}: ${SRCDIR}${CLIENTE}.cpp ${SOCKET}.o
 #GestorValla
 
 ${GESTVALLAS}.o:${SRCDIR}${GESTVALLAS}.cpp ${ANUNCIO}.o ${VALLA}.o ${MONVALLA}.o ${imageDownloader}.o
-	${CC} -c ${CPPFLAGS} ${SRCDIR}${GESTVALLAS}.cpp ${ANUNCIO}.o ${VALLA}.o ${MONVALLA}.o ${imageDownloader}.o
+	${CC} -c ${CPPFLAGS} ${SRCDIR}${GESTVALLAS}.cpp ${ANUNCIO}.o ${VALLA}.o ${MONVALLA}.o ${imageDownloader}.o ${LDFLAGS}
 
 ${ANUNCIO}.o: ${SRCDIR}${ANUNCIO}.hpp ${SRCDIR}${ANUNCIO}.cpp
 	${CC} -c ${CPPFLAGS} ${SRCDIR}${ANUNCIO}.cpp
@@ -92,5 +97,3 @@ clean:
 	${RM} ./bin/*.jpg
 	${RM} ./bin/${ADMIN}
 	${RM} ./bin/${CLIENTE}
-	
-	
