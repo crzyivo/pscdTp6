@@ -22,7 +22,7 @@ using namespace std;
  bool fin = false;
 
 /*
- * Muestra la información actual del sistema
+ * Gestiona los datos de la información actual del sistema
  */
 void mostrarEstado(MonitorValla* m, int& nPeticiones, double& tiempoEstimado){
   int imgTot;
@@ -35,7 +35,7 @@ void mostrarEstado(MonitorValla* m, int& nPeticiones, double& tiempoEstimado){
 }
 
 /*
- * Muestra el histórico del sistema
+ * Gestiona los datos del histórico del sistema
  */
 void mostrarHistorico(MonitorValla* m, int& nPeticiones, double& tiempoTotal, double& tiempoMedio){
   int imgTot;
@@ -49,9 +49,43 @@ void mostrarHistorico(MonitorValla* m, int& nPeticiones, double& tiempoTotal, do
 }
 
 /*
+ * Muestra el menú para poder acceder a estadísticas mientras se muestran vallas
+ */
+void menuDuranteCierre(MonitorValla* vallas) {
+  int n;
+  double t;
+  double m;
+  while(true){
+    cout<<"\nInstrucciones del administrador:\n";
+    cout<<"1-> Mostrar estado de las vallas\n"
+        <<"2-> Mostrar historico de las vallas\n"
+        <<"3-> Apagar el sistema\n"<<flush;
+    char op[5];
+    cin>>op;
+    switch(atoi(op)){
+      case 1:
+              mostrarEstado(vallas,n,t);
+              cout<<"\nAnuncios en espera: "<<n<<"."<<endl;
+              cout<<"Tiempo actual contratado: "<<t<<" segundos."<<endl;
+              break;
+      case 2:
+              mostrarHistorico(vallas,n,t,m);
+              cout<<"\nAnuncios totales mostrados: "<<n<<"."<<endl;
+              cout<<"Tiempo total de anuncios: "<<t<<" segundos."<<endl;
+              cout<<"Tiempo medio de los anuncios: "<<m<<" segundos."<<endl;
+              break;
+      case 3:
+              cerr<<"\nEl sistema ya esta finalizandose\n"<<endl;
+              break;
+      default:
+              cout<<"Instruccion erronea. Prueba con otra opcion"<<endl;
+    }
+  }
+}
+/*
  * Lanza los hilos correspondientes al subastador y al gestor de vallas. Con la ayuda de un menú
- * mostrará por pantalla el estado actual del sistema, el historico del sistema o apagará el
- * sistema.
+ * interactivo mostrará por la salida estándar información del sistema: estado actual o el 
+ * historico o bien apagará el sistema ordenadamete.
  */
 int main(int argc, char * argv[]){
  
@@ -60,11 +94,10 @@ int main(int argc, char * argv[]){
    if(argc >1){	//Inicializa con Parametros
  		for (int i = 1; i< argc; i++){
  			if(*argv[i]++ == '-'){
- 				if(*argv[i] == 'p'){		//numero de vueltas
+ 				if(*argv[i] == 'p'){		//numero de puerto de servicio
  					if(*++argv[i] == '\0'){i++;/*saltar espacio en blanco*/}
  					puertoSubasta = atoi(argv[i]);
- 				}else if(*argv[i] == 't'){	//direccion del servidor
-					if(*++argv[i] == '\0'){i++; /*saltar espacio en blanco*/}
+ 				}else if(*argv[i] == 't'){	//modo test on
 					modoTest = true;
         }else{
  					cout << "Uso: [-p<puerto>] [-t]\n";
@@ -94,7 +127,7 @@ int main(int argc, char * argv[]){
   //Inicio el gestor de vallas y de la subasta.
   thread thMV(&runGestorValla,&vallas);
   thread thMS(&runSubastador,puertoSubasta ,&subasta, &vallas);
-  
+  thread thMM;
   //Bucle de instrucciones
   int n;
   double t;
@@ -126,10 +159,13 @@ int main(int argc, char * argv[]){
               subasta.CerrarSalon();
               socket_fd=socket.Connect();
               socket.Close(socket_fd);
+              thMM = thread (&menuDuranteCierre, &vallas);  //Mostrar menú cuando servidor cerrado
+              thMM.detach();
               thMS.join();
               cout<<"Subastas finalizadas"<<endl;
               //Una vez cerrada la subasta, cierro las vallas.
               vallas.finServicio();
+    
               thMV.join();
               cout<<"Vallas finalizadas"<<endl;
               fin = true;
@@ -142,6 +178,6 @@ int main(int argc, char * argv[]){
   
   cout<<"\nFin correcto del servicio"<<endl;
   
-  return 0;
+  exit(0);
   
 }
