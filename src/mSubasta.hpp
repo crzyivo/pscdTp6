@@ -37,7 +37,7 @@ private:
 	int numPujas;	//Numero de pujas recibidas en el tiempo T
 	int numPujasSend;	//Numero de pujas recibidas en el tiempo T-1
 	bool primero;		//Primero que se recibe puja (gana ante empate)
-	bool aceptandoPujas;
+	bool aceptandoPujas;	//True si y solo si la subasta actual se consieda en curso
 	bool fin_Subastas;	//True si y solo si no salen mas subastas 
 	mutex exclusionDatos;        
 	condition_variable envioPujas;	//Esperar notificacion de envio

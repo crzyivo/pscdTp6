@@ -59,18 +59,20 @@ void mostrarImagen (Valla v, const int numValla, MonitorValla* gestor) {
         // Creamos el objeto para descargar imágenes
         ImageDownloader downloader;
         anuncio.infoURL(URL);
-        downloader.downloadImage(URL, nombreImg);
+        if(downloader.downloadImage(URL, nombreImg) <0){
+            cerr << "Error en la descarga\n";
+        }else{
 
         // Creamos una valla publicitaria con una imagen
-        CImg<unsigned char> img_principal(nombreImg);
-        vallaConImg.resize(v.infoAnchura(),v.infoAltura());
-        vallaConImg.move((numValla-1)*(v.infoAnchura()+50), numValla-1);
+            CImg<unsigned char> img_principal(nombreImg);
+            vallaConImg.resize(v.infoAnchura(),v.infoAltura());
+            vallaConImg.move((numValla-1)*(v.infoAnchura()+50), numValla-1);
 
-        // Mostrar imagen
-        vallaConImg.display(img_principal);
-        this_thread::sleep_for(chrono::seconds(anuncio.infoTiempo()));
-        vallaConImg.display(visu);          //Ventana en negro (sin mostrar imagen)
-        numImagen++;
+            // Mostrar imagen
+            vallaConImg.display(img_principal);
+            this_thread::sleep_for(chrono::seconds(anuncio.infoTiempo()));
+            vallaConImg.display(visu);          //Ventana en negro (sin mostrar imagen)
+        }
     }
 }
 

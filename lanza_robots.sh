@@ -15,6 +15,5 @@ exec xterm  -hold -e ./bin/Cliente -p $puerto -d $dir -a &
 exec xterm  -hold -e ./bin/Cliente -p $puerto -d $dir -a &
 exec xterm  -hold -e ./bin/Cliente -p $puerto -d $dir -a &
 exec xterm  -hold -e ./bin/Cliente -p $puerto -d $dir -a &
-read -n 1 -s
 fi
 exit 0

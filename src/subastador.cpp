@@ -16,11 +16,6 @@
 #include "Socket.hpp"
 #include "mSubasta.hpp"
 /***********************
- * Mensajes Servidor Cliente:
- * "Comienza la subasta en %d\n"
- * "Puja cliente %d aceptada. Quien ofrece %d\n" 
- * "Puja no valida. Actual puja %d %d \n", cliente, puja
- * 
  * Mensajes Cliente Servidor
  *  "Acepto"
  *  "Subo %d"
@@ -29,8 +24,6 @@
  *  "Salir de subasta"
  **********************/ 
 
-//sigset_t set;
-struct sigaction act;
 //monitorSubasta mSubas;
 const int maxNumCLientes = 35;
 const int tiempoEntrePujas = 300; //Tiempo que ha de esperar a que los interesados contesten
@@ -43,7 +36,7 @@ void sinConectar(int i){signal(SIGABRT, sinConectar);
 	cerr << "\033[1;31mSenal de abort durante el proceso de conexiones\033[0m\n";
 }
 void clienteAbandona(int i){
-	sigaction(SIGPIPE, &act, NULL);
+	signal(SIGPIPE, clienteAbandona);
 	cerr << "\033[1;31mCLiente salio inesperadamente\033[0m\n";
 	ErrnoM = true;
 }

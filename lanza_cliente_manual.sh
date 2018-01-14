@@ -6,6 +6,5 @@ if [ "$#" -ne 2 ]; then
 else
 echo -e "Lanzando cliente manual a $dir : $puerto\n"
 exec xterm  -hold -e ./bin/Cliente -p $puerto -d $dir &
-read -n 1 -s
 fi
 exit 0 
