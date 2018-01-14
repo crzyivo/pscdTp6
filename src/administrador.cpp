@@ -19,6 +19,8 @@
 #include "Socket.hpp"
 using namespace std;
 
+ bool fin = false;
+
 /*
  * Muestra la información actual del sistema
  */
@@ -94,7 +96,6 @@ int main(int argc, char * argv[]){
   thread thMS(&runSubastador,puertoSubasta ,&subasta, &vallas);
   
   //Bucle de instrucciones
-  bool fin = false;
   int n;
   double t;
   double m;
@@ -105,9 +106,9 @@ int main(int argc, char * argv[]){
     cout<<"1-> Mostrar estado de las vallas\n"
         <<"2-> Mostrar historico de las vallas\n"
         <<"3-> Apagar el sistema"<<endl;
-    int op;
+    char op[5];
     cin>>op;
-    switch(op){
+    switch(atoi(op)){
       case 1:
               mostrarEstado(&vallas,n,t);
               cout<<"\nAnuncios en espera: "<<n<<"."<<endl;
@@ -131,7 +132,6 @@ int main(int argc, char * argv[]){
               vallas.finServicio();
               thMV.join();
               cout<<"Vallas finalizadas"<<endl;
-
               fin = true;
               break;
       default:

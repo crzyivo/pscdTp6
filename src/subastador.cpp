@@ -31,19 +31,15 @@ const int MAX_TIEMPO_VALLA = 50;
 const int MIN_TIEMPO_VALLA = 20;
 int puertoSubasta = 32005;
 monitorSubasta * mSubas;
-bool ErrnoM = false;
 void sinConectar(int i){signal(SIGABRT, sinConectar);
 	cerr << "\033[1;31mSenal de abort durante el proceso de conexiones\033[0m\n";
 }
 void clienteAbandona(int i){
 	signal(SIGPIPE, clienteAbandona);
 	cerr << "\033[1;31mCLiente salio inesperadamente\033[0m\n";
-	ErrnoM = true;
 }
 
 void controlSubasta(){
-	
-
 	signal(SIGPIPE, clienteAbandona);
 	srand(time(NULL));
 	while(mSubas->SalonAbierto()){
@@ -62,6 +58,14 @@ void controlSubasta(){
 	}
 	mSubas->noAceptarPujas(); //asegurarse de que esta todo cerrado
 	mSubas->CerrarSalon(); //avisar si aun queda gente esperando
+	//Esperar a que todos los clientes se puedan desconectar antes de forzar cierre del subastador
+	for(int i = 0; i < 3 && mSubas->numPujadores() >0; i++){ 
+		this_thread :: sleep_for(chrono :: milliseconds(tiempoEntrePujas*10));
+	}
+	//Si quedasen clientes, se fuerza el cierre del sistema
+	if(mSubas->numPujadores() >0){
+		mSubas->forzarCierre();
+	}
 	cerr << "\033[31mSe cerrara el socket\033[0m\n";
 }
 

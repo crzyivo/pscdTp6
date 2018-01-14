@@ -90,6 +90,7 @@ public:
 	void CerrarSocket();
 	void noAceptarPujas();
 	bool separaMensaje(string In, string &mensaje);
+	void forzarCierre();
 };
 
 #endif 

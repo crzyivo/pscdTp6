@@ -194,3 +194,9 @@ bool monitorSubasta::separaMensaje(string In, string &mensaje){
 	mensaje = strtok(NULL, ";");
 	return this->numMensaje <= atoi(mensajesN);
 }
+
+void monitorSubasta::forzarCierre(){
+	unique_lock<mutex> lck(this->exclusionDatos);
+	this->pujadoresObservando = 0;
+	this->cerrarSubasta.notify_all();
+}
