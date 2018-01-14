@@ -112,14 +112,14 @@ int main(int argc, char *argv[]) {
 		exit(1);
 	}else{
 		numMensaje = strtok(strdup(nueva_puja.c_str()), ";");
-		cout << miID << nueva_puja;
+		cout << "\033[33m" + nueva_puja + "\033[0m";
 	}
 	
 
 	while(!salirSubastas){
 		
 		if(!automatic && numMensaje != "0"){
-			cout << miID << "escriba a,p,sp o ss para:\na -> para aceptar puja\np -> pasar puja\nsp-> salir de la puja actual y esperar una nueva\nss -> finalizar subasta\n";
+			cout << "escriba a,p,sp o ss para:\na -> para aceptar puja\np -> pasar puja\nsp-> salir de la puja actual y esperar una nueva\nss -> finalizar subasta\n";
 			cin >> puja;
 		}else if(!aceptarSiguiente && automatic){
 			puja = "p";
@@ -136,22 +136,19 @@ int main(int argc, char *argv[]) {
 		string aout;
 		if(puja == "p"){
 				aout = numMensaje + ";Paso\n";
-				//cout << miID << " " << numMensaje + ";Paso\n";
 		}else if(puja == "a"){
 				aout = numMensaje  + ";Acepto\n";
-				//cout << miID << " " <<numMensaje  + ";Acepto\n";
 		}else if(puja == "ss"){
 			aout = numMensaje  + ";Salir de subasta\n";
 			salirSubastas = true;
 		}else if(puja == "sp"){	
 			aout = numMensaje  + ";Salir puja Actual\n";
 		}else if(numMensaje != "0"){//Tratar mensajes no entendidos
-			//cout<<"No te he entendido"<<endl;
 			aout = numMensaje + ";Paso\n";
 		}
 		read_bytes = socket.Send(socket_fd, aout);
 		if(automatic){
-			cout << miID << " " << aout;
+			cout << " " << aout;
 		}
 		if(read_bytes > 0 && numMensaje == "0"){
 			salirSubastas = true;
@@ -159,7 +156,6 @@ int main(int argc, char *argv[]) {
 			if((read_bytes = socket.Recv(socket_fd,nueva_puja,MESSAGE_SIZE)) >0){
 				numMensaje = strtok(strdup(nueva_puja.c_str()), ";");
 				nueva_puja = strtok(NULL, ";");		//TRATAR MENSAJES DE ENTRADA DE LA SUBASTA
-				cout << miID << nueva_puja;
 				//Observar si existe ganador
 				string gan = strtok(strdup(nueva_puja.c_str()), " ");
 				if(automatic && numMensaje != "0"){
@@ -193,17 +189,15 @@ int main(int argc, char *argv[]) {
 					if(gan == "Ganador"){
 						gan = strtok(NULL, ":");
 						gan = strtok(NULL, " ");
-						cout << miID << gan << endl;
 						ganador = stoi(gan);
 					}
 					if(gan == "Usted" || ganador == miID){
-						cout << miID << "SOY EL GANADOR\n";
 						//Enviar url
 						//esperar ACK
 						do{
 							string url;	
 							if(!automatic){
-								cout << miID << "Escriba la url valida de la imagen o r si la desea aleatoria\n";
+								cout << "Ha ganado, Escriba la url valida de la imagen o r si la desea aleatoria\n";
 								cin >> url;
 								if(url == "r"){
 									url = imagenes[rand()%7];
@@ -217,7 +211,7 @@ int main(int argc, char *argv[]) {
 								salirSubastas = true;
 							}
 							if(automatic){
-								cout << miID << url << endl;
+								cout << url << endl;
 							}
 							if(read_bytes < 1 || (read_bytes =socket.Recv(socket_fd,nueva_puja,MESSAGE_SIZE))<0){
 								cerr << "\033[31mError al recibir confimacion del envio de la URL\033[0m\n";
@@ -225,8 +219,7 @@ int main(int argc, char *argv[]) {
 								socket.Close(socket_fd);
 								exit(1);
 							}
-							cout << miID << nueva_puja << endl;
-							cout << miID << "se ha enviado algo\n";
+							cout <<"\033[33m" + nueva_puja + "\033[0m" << endl;
 						}while(nueva_puja != "URL recibida\n");
 							
 					}
@@ -237,14 +230,14 @@ int main(int argc, char *argv[]) {
 				//Si he salido de la puja
 				//Si he salido de la subasta
 				nueva_puja = strtok(strdup(nueva_puja.c_str()), " "); 
-				cerr << "\033[34m" + nueva_puja + "\033[0m\n";
+				cout << "\033[34m" + nueva_puja + "\033[0m\n";
 				if(nueva_puja != "Pujador" && nueva_puja != "Hay" && nueva_puja !="Saliendo"){
 					if(numMensaje != "0"){
-						cout << miID << "Estoy esperando nueva subasta\n";
+						cout << "Estoy esperando nueva subasta\n";
 						if(read_bytes > 0 && socket.Recv(socket_fd,nueva_puja,MESSAGE_SIZE)>0){
-							cout << miID << "\033[34m" + nueva_puja + "\033[0m\n";
+							cout << "\033[34m" + nueva_puja + "\033[0m\n";
 							if(read_bytes > 0){
-								cout << miID << nueva_puja;
+								cout << nueva_puja;
 								numMensaje = strtok(strdup(nueva_puja.c_str()), ";");
 								if(numMensaje == "0"){
 									nueva_puja = strtok(NULL, ";");

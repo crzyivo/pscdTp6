@@ -45,14 +45,11 @@ void controlSubasta(){
 	while(mSubas->SalonAbierto()){
 		//NO EMPEZAR CON 0 Clientes
 		if(mSubas->comenzarSubastas()){
-			cout << "\033[1;34mSalon abierto. Esperando a que se conecten todos los clientes interesados\033[0m\n";
 			this_thread :: sleep_for(chrono :: milliseconds(tiempoEntrePujas));
 			mSubas->iniciarNuevaSubasta(rand()%MAX_TIEMPO_VALLA+MIN_TIEMPO_VALLA); 
 			while(mSubas->numPujadores() > 0 && mSubas->SubastaEnCurso()){
-				cerr << "\033[31m Esperar \033[0m\n";
 				this_thread :: sleep_for(chrono :: milliseconds(tiempoEntrePujas));
 				mSubas->enviarPuja();
-				cerr << "\033[32m Todos Avisados \033[0m\n";
 			}
 		}
 	}
@@ -66,7 +63,6 @@ void controlSubasta(){
 	if(mSubas->numPujadores() >0){
 		mSubas->forzarCierre();
 	}
-	cerr << "\033[31mSe cerrara el socket\033[0m\n";
 }
 
 
@@ -99,17 +95,14 @@ void subastaCliente(Socket *subasta, int cliente, MonitorValla *mV){
 			//Bucle de subasta
 			//Cada iteracion corresponde al envio del precio actual, recibir y tratar mensajes de pujadores
 			while(!errorRecv && seguirPuja && mSubas->SubastaEnCurso()){
-				cout << mensajeOut;
 				if(!errorRecv && subasta->Send(cliente, mensajeOut) >0){
 					if(errorRecv || subasta->Recv(cliente, mensajeIn, maxMensaje)<1){
-						cerr << "Error al recibir, cliente desconectado\n";
+						cerr << "\033[31mError al recibir, cliente desconectado\033[0m\n";
 						enSubasta = false;
 						seguirPuja = false;
 						errorRecv = true;
 					}else{
 						
-						cout << to_string(cliente) +" " + mensajeIn;
-
 						string mensajeChar;
 						if(mSubas->separaMensaje(mensajeIn, mensajeChar) || mensajeChar == "Salir de subasta\n" ){
 							if(mensajeChar == SaltarPujas){	//pujador no interesado en seguir subasta actual
@@ -126,24 +119,21 @@ void subastaCliente(Socket *subasta, int cliente, MonitorValla *mV){
 								}
 							}else{ //Cliente mantiene interes en la puja (haya aceptado o pasado)
 								mSubas->pujar(mensajeChar, cliente);
-								cerr << "\033[33m" +to_string(cliente) + " ha pujado\033[0m\n";
 								int numPujadores;
 								switch(numPujadores = mSubas->nPujas()){	//Bloqueante. Devuelve nº de pujadores interesados
 								case 0://Nadie ha pujado
 									if(mSubas->SubastaAceptada()){
 										mensajeOut = to_string(mSubas->nMensaje()) +";Ganador de la puja: " + to_string(mSubas->PujadorActual()) + "\n";
-										cout << "Hay ganador\n";
 										if(mSubas->PujadorActual() ==  cliente){
 											if(!errorRecv && subasta->Send(cliente, mensajeOut) >0){
 												if(errorRecv || subasta->Recv(cliente, mensajeIn, maxMensaje)<1){
-													cerr << "Error al recibir, cliente desconectado\n";
+													cerr << "\033[31mError al recibir, cliente desconectado\033[0m\n";
 													enSubasta = false;
 													seguirPuja = false;
 													errorRecv = true;
 												}else{
 												
 													string obUrl = strtok(strdup(mensajeIn.c_str()), ":");
-													cout << mensajeIn << endl;
 													while("http" != obUrl && !errorRecv) {
 														if(!errorRecv && subasta->Send(cliente, "Usted ha ganado la puja, por favor, envia una url valida\n") <1){
 															errorRecv = true;
@@ -151,13 +141,12 @@ void subastaCliente(Socket *subasta, int cliente, MonitorValla *mV){
 														if(!errorRecv && subasta->Recv(cliente, mensajeIn, maxMensaje)>1){
 															obUrl = strtok(strdup(mensajeIn.c_str()), ":");
 														}else{
-															cerr << "Error al recibir, cliente desconectado\n";
+															cerr << "\033[31mError al recibir, cliente desconectado\033[0m\n";
 															enSubasta = false;
 															seguirPuja = false;
 															errorRecv = true;
 														}
 													}
-														//subasta->Send(cliente, "URL recibida\n");
 														mensajeOut = "URL recibida\n";
 														Anuncio anun(mensajeIn.c_str(), t); 
 														mV->encolar(anun);
@@ -185,7 +174,6 @@ void subastaCliente(Socket *subasta, int cliente, MonitorValla *mV){
 							}
 						}else{
 							mensajeOut = to_string(mSubas->nMensaje()) +";La subasta esta mas adelantada. Por favor, espere una nueva subasta\n";
-							cerr << "\033[35mCliente va con retraso, esperara nueva subasta\033[0m\n";
 							if(!errorRecv && subasta->Send(cliente, mensajeOut) <= 0){
 								enSubasta = false;
 								errorRecv = true;
@@ -239,7 +227,6 @@ int runSubastador(int puertoSubasta, monitorSubasta *mSubasAdmin, MonitorValla *
         int cliente;
 	while((cliente =subasta.Accept()) > -1 && mSubas->SalonAbierto()){
 		//Abrir Salon
-		cout << "Cliente con fd " + to_string(cliente) + " ha entrado en subasta conectado\n";
 		thread th(&subastaCliente, &subasta,cliente, mV);
 		th.detach();
 		// esperar a que puedan entrar más clientes a Subasta
@@ -247,10 +234,9 @@ int runSubastador(int puertoSubasta, monitorSubasta *mSubasAdmin, MonitorValla *
 	}
 
 	subasta.Close(cliente);
-	cerr << "No se aceptan mas clientes \n";
 	mSubas->finSubasta();
 	subasta.Close(sockSubasta);
 
-	cout << "bye bye\n";
+	cout << "Proceso de subasta finalizado correctamente\n";
 	return 0;
 }

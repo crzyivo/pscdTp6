@@ -140,7 +140,6 @@ bool monitorSubasta::CerrarSalon(){
 	this->fin_Subastas = true;
 	if(!this->aceptandoPujas){
 		this->comenzarS.notify_all();
-		cerr << "\033[31mNotificando quien Este esperando\033[0m\n";
 	}
 	this->esperarClientes.notify_all();
 
@@ -174,7 +173,7 @@ int monitorSubasta::nMensaje(){
 bool monitorSubasta::numMenAceptado(int numero){
 	unique_lock<mutex> lck(this->exclusionDatos);
 	return this->numMensaje <= numero;
-	cerr << "\033[31mNotificando quien Este esperando\033[0m\n";
+
 }
 //Cierra la subasta
 void monitorSubasta::CerrarSocket(){
@@ -184,7 +183,6 @@ void monitorSubasta::CerrarSocket(){
 
 void monitorSubasta::noAceptarPujas(){
 	unique_lock<mutex> lck(this->exclusionDatos);
-	cerr << "\033[31mNo se aceptaran mas pujas\033[0m\n";
 	this->aceptandoPujas = false;
 }
 
