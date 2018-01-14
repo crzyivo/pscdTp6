@@ -5,24 +5,31 @@ NIP     NOMBRE
 747325  Victor M lafuente Ayuda
 ------------------------------------------
 
-Fecha          Tiempo         Autor        Concepto                         Horas computadas
----------   -------------   --------    ---------------                    ------------------
-22-12-17     11.00/12.30     684146     Reunion grupal                              1h 30'
-22-12-17     11.00/12.30     739324     Reunion grupal                              1h 30'
-22-12-17     11.00/12.30     747325     Reunion grupal                              1h 30'
+Fecha          Tiempo         Autor        Concepto                        				 Horas computadas
+---------   -------------   --------    ---------------                   				 ------------------
+22-12-17     	11.00/12.30     684146     	Reunion grupal                              			1h 30' 
+22-12-17     	11.00/12.30     739324     	Reunion grupal                              			1h 30'
+22-12-17    	11.00/12.30     747325     	Reunion grupal                              			1h 30'
 
-26-12-17    13.00/14.00      747325     Modulo Subasta(primer boceto)               1h
-02-01-18    15.30/16.20      747325     Modulo Subasta                              50'
+26-12-17    	13.00/14.00     747325     	Modulo Subasta(primer boceto)               			1h
+02-01-18    	15.30/16.20     747325		Modulo Subasta                              			50'
 
-03-01-18    10.30/13:30      739324     Gestor de valla(comprensión problema
-										y diseño)									3h
-05-01-18	17.00/20.00		 739324		Gestor de valla(Implementación)				3h
-07-01-18	16.30/20.30		 739324		Gestor de valla(Implementación)				4h
-08-01-18	16.00/21.00		 739324		Gestor de valla(Implementación)				5h
-09-01-18	15.30/20.30		 739324		Gestor de valla(Depuración)					5h
-10-01-18	16.00/18.30		 739324		Gestor de valla(Test y mejora código)		2h
-12-01-18	17.00/18.00		 739324		Gestor de valla(Dar robustez)				1h
-12-01-18	18.00/20.00		 739324		Disenio.pdf									2h
+03-01-18    	10.30/13:30     739324     	Gestor de valla(comprensión problema y diseño)			3h
+05-01-18	17.00/20.00	739324		Gestor de valla(Implementación)					3h
+05-01-18	17.15/18.40	684146		Cliente (Diseño e Implementación)				1h 25' 
+05-01-18	19.00/20.00	684146		Conexion cliente/subastador					1h 
+07-01-18	16.30/20.30	739324		Gestor de valla(Implementación)					4h
+08-01-18	16.00/21.00	739324		Gestor de valla(Implementación)					5h
+08-01-18	12.00/14.00	684146		Problema de entrada/salida Cliente				2h 
+09-01-18	15.30/20.30	739324		Gestor de valla(Depuración)					5h
+09-01-18	16.00/21.00	684146		Administrador (Diseño)						5h 
+10-01-18	16.00/18.30	739324		Gestor de valla(Test y mejora código)				2h 
+10-01-18	16.00/20.40	684146		Administrador (Implementación)					4h 40' 
+11-01-18	17.10/20.30	684146		Administrador (Implementación y pruebas)			3h 40' 
+12-01-18	17.00/18.00	739324		Gestor de valla(Dar robustez)					1h
+12-01-18	18.00/20.00	739324		Disenio.pdf							2h
+12-01-18	16.00/21.00	684146		Administrador, Makefile y scripts				5h 
 
 TOTAL horas computadas por autor:
 	739324 -> 26h 30' 
+	684146 -> 24h 25'
