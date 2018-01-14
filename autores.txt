@@ -41,5 +41,5 @@ Fecha          Tiempo         Autor        Concepto                        				 
 TOTAL horas computadas por autor:
 	739324 -> 32h 50' 
 	684146 -> 24h 25'
-	747325 -> Xh X'
+	747325 -> 63h 15'
 
