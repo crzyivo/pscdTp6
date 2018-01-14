@@ -35,7 +35,10 @@ Fecha          Tiempo         Autor        Concepto                        				 
 12-01-18		18.00/20.00		739324		Disenio.pdf												2h
 12-01-18		16.00/21.00		684146		Administrador, Makefile y scripts						5h 
 
+13-01-18		18.00/19.50		739324		Test y correcciones subastador							1h 50'
 
+14-01-18		16.00/20.30		739324		Diagramas, disenio.pdf y test							4h 30'
 TOTAL horas computadas por autor:
-	739324 -> 26h 30' 
+	739324 -> 32h 50' 
 	684146 -> 24h 25'
+
