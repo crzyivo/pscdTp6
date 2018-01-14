@@ -60,7 +60,7 @@ void controlSubasta(){
 	mSubas->CerrarSalon(); //avisar si aun queda gente esperando
 	//Esperar a que todos los clientes se puedan desconectar antes de forzar cierre del subastador
 	for(int i = 0; i < 3 && mSubas->numPujadores() >0; i++){ 
-		this_thread :: sleep_for(chrono :: milliseconds(tiempoEntrePujas*10));
+		this_thread :: sleep_for(chrono :: milliseconds(tiempoEntrePujas));
 	}
 	//Si quedasen clientes, se fuerza el cierre del sistema
 	if(mSubas->numPujadores() >0){
