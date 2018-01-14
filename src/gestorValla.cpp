@@ -25,48 +25,51 @@ using namespace cimg_library;
 
 const int MAX_LONG_NOMBRE_IMG = 100;    //Longitud máxima del nombre de una imagen
 const int NUM_VALLAS = 2;               //Número de vallas que se ofertan
-//MonitorValla gestor;
+const int VALLA_WIDTH = 400;			//Ancho de las vallas publicitarias
+const int VALLA_HEIGHT = 400;			//Alto de las vallas publicitarias
 
 /*
  * Dada una valla y un gestor descarga las imágenes que se obtienen de los anuncios 
- * encolados y las muestra en valla
+ * encolados y las muestra en valla. Si la descarga no se ha realizado correctamente
+ * informa al usuario por la salida estándar del error.
  */
-void mostrarImagen (Valla v, const int numValla, MonitorValla* gestor) {
+void mostrarImagen (Valla v, const int IDvalla, MonitorValla* gestor) {
 
-    int numImagen = 1;                      //Recuento de imágenes que ha mostrado este proceso
-    Anuncio anuncio;                        //Variable que nos permite guardar el anuncio
-    char nombreVentana[MAX_LONG_NOMBRE_IMG];    //Nombre de la ventana que representa la valla
-    char numV[30];      //Pasa el número de valla a caracter
-    sprintf(numV, "%d", numValla);
+    Anuncio anuncio;                         //Variable que nos permite guardar el anuncio
+	const int alturaV = v.infoAltura();		 //Altura de la valla v
+	const int anchuraV = v.infoAnchura();	 //Anchura de la valla v
+    char nombreVentana[MAX_LONG_NOMBRE_IMG]; //Nombre de la ventana que representa la valla
+    char numV[30];      					 //Identificador de valla como caracter
+    sprintf(numV, "%d", IDvalla);
     
     strcpy(nombreVentana, "Valla ");
     strcat(nombreVentana, numV);
     
-    CImgDisplay vallaConImg(v.infoAnchura(),v.infoAltura(),nombreVentana);
-    CImg<unsigned char> visu(400,400,1,3,0);
+    CImgDisplay vallaConImg(anchuraV,alturaV,nombreVentana);
+    CImg<unsigned char> visu(anchuraV,alturaV,1,3,0);
     
     while (gestor->obtenerAnuncio(anuncio)) {
-       
-        char numImg[30];
-        sprintf(numImg, "%d", numImagen);   //Pasa el número de imagen a caracter
-        char URL[MAX_LONG_URL];                 //Guarda URL que se ha de descargar
+		
+		v.nuevoAnuncio(anuncio);				//Cambia el anuncio que muestra v
+	    char URL[MAX_LONG_URL];                 //Guarda URL que se ha de descargar
         char nombreImg[MAX_LONG_NOMBRE_IMG];    //Nombre que tendrá la imagen que se descargue
 
         strcpy(nombreImg, "IMG");               
         strcat(nombreImg, numV);
-        strcat(nombreImg, ".jpg");              //nombreImg = IMG*numValla*.jpg
+        strcat(nombreImg, ".jpg");              //nombreImg = IMG*IDvalla*.jpg
 
-        // Creamos el objeto para descargar imágenes
+        // Crear el objeto para descargar imágenes
         ImageDownloader downloader;
         anuncio.infoURL(URL);
-        if(downloader.downloadImage(URL, nombreImg) <0){
-            cerr << "Error en la descarga\n";
+        if(downloader.downloadImage(URL, nombreImg) < 0){ 
+			//La imagen no se ha descargado correctamente
+            cerr << "\033[31mError en la descarga en valla " + to_string(IDvalla) + "\033[0m\n";
         }else{
 
-        // Creamos una valla publicitaria con una imagen
+        	// Crear una valla publicitaria con una imagen
             CImg<unsigned char> img_principal(nombreImg);
-            vallaConImg.resize(v.infoAnchura(),v.infoAltura());
-            vallaConImg.move((numValla-1)*(v.infoAnchura()+50), numValla-1);
+            vallaConImg.resize(anchuraV,alturaV);
+            vallaConImg.move((IDvalla-1)*(anchuraV+50), IDvalla-1);
 
             // Mostrar imagen
             vallaConImg.display(img_principal);
@@ -81,8 +84,6 @@ void mostrarImagen (Valla v, const int numValla, MonitorValla* gestor) {
  */
 void runGestorValla(MonitorValla* gestor) {
     // Tamaños de ventana para las vallas publicitarias
-    const int VALLA_WIDTH = 400;
-    const int VALLA_HEIGHT = 400;
 
     Valla vallasDisponibles[NUM_VALLAS];
     thread mostrar[NUM_VALLAS];
