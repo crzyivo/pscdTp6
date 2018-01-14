@@ -68,7 +68,7 @@ void controlSubasta(){
 
 void subastaCliente(Socket *subasta, int cliente, MonitorValla *mV){
 	signal(SIGPIPE, clienteAbandona);
-	signal(SIGABRT, sinConectar);
+	//signal(SIGABRT, sinConectar);
 	bool errorRecv = false;
 	bool enSubasta = true;
 	const int maxMensaje = 1000;
