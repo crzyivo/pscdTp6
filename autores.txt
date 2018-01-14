@@ -16,7 +16,7 @@ Fecha          Tiempo         Autor        Concepto                         Hora
 
 03-01-18    10.30/13:30      739324     Gestor de valla(comprensión problema
 										y diseño)									3h
-05-01-18	17.00/20.00		 73924		Gestor de valla(Implementación)				3h
+05-01-18	17.00/20.00		 739324		Gestor de valla(Implementación)				3h
 07-01-18	16.30/20.30		 739324		Gestor de valla(Implementación)				4h
 08-01-18	16.00/21.00		 739324		Gestor de valla(Implementación)				5h
 09-01-18	15.30/20.30		 739324		Gestor de valla(Depuración)					5h
