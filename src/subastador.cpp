@@ -26,7 +26,7 @@
 
 //monitorSubasta mSubas;
 const int maxNumCLientes = 35;
-const int tiempoEntrePujas = 300; //Tiempo que ha de esperar a que los interesados contesten
+const int tiempoEntrePujas = 5000; //Tiempo que ha de esperar a que los interesados contesten
 const int MAX_TIEMPO_VALLA = 50;
 const int MIN_TIEMPO_VALLA = 20;
 int puertoSubasta = 32005;
@@ -46,7 +46,7 @@ void controlSubasta(){
 		//NO EMPEZAR CON 0 Clientes
 		if(mSubas->comenzarSubastas()){
 			cout << "\033[1;34mSalon abierto. Esperando a que se conecten todos los clientes interesados\033[0m\n";
-			this_thread :: sleep_for(chrono :: milliseconds(tiempoEntrePujas*10));
+			this_thread :: sleep_for(chrono :: milliseconds(tiempoEntrePujas));
 			mSubas->iniciarNuevaSubasta(rand()%MAX_TIEMPO_VALLA+MIN_TIEMPO_VALLA); 
 			while(mSubas->numPujadores() > 0 && mSubas->SubastaEnCurso()){
 				cerr << "\033[31m Esperar \033[0m\n";
@@ -144,7 +144,7 @@ void subastaCliente(Socket *subasta, int cliente, MonitorValla *mV){
 												
 													string obUrl = strtok(strdup(mensajeIn.c_str()), ":");
 													cout << mensajeIn << endl;
-													while("http" != obUrl) {
+													while("http" != obUrl && !errorRecv) {
 														if(!errorRecv && subasta->Send(cliente, "Usted ha ganado la puja, por favor, envia una url valida\n") <1){
 															errorRecv = true;
 														}

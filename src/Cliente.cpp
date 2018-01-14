@@ -112,7 +112,7 @@ int main(int argc, char *argv[]) {
 		exit(1);
 	}else{
 		numMensaje = strtok(strdup(nueva_puja.c_str()), ";");
-		cout << miID << nueva_puja << endl;
+		cout << miID << nueva_puja;
 	}
 	
 
@@ -136,21 +136,23 @@ int main(int argc, char *argv[]) {
 		string aout;
 		if(puja == "p"){
 				aout = numMensaje + ";Paso\n";
-				cout << miID << " " << numMensaje + ";Paso\n";
+				//cout << miID << " " << numMensaje + ";Paso\n";
 		}else if(puja == "a"){
 				aout = numMensaje  + ";Acepto\n";
-				cout << miID << " " <<numMensaje  + ";Acepto\n";
+				//cout << miID << " " <<numMensaje  + ";Acepto\n";
 		}else if(puja == "ss"){
 			aout = numMensaje  + ";Salir de subasta\n";
 			salirSubastas = true;
 		}else if(puja == "sp"){	
 			aout = numMensaje  + ";Salir puja Actual\n";
 		}else if(numMensaje != "0"){//Tratar mensajes no entendidos
-			cout<<"No te he entendido"<<endl;
+			//cout<<"No te he entendido"<<endl;
 			aout = numMensaje + ";Paso\n";
 		}
 		read_bytes = socket.Send(socket_fd, aout);
-		cout << miID << " " << aout;
+		if(automatic){
+			cout << miID << " " << aout;
+		}
 		if(read_bytes > 0 && numMensaje == "0"){
 			salirSubastas = true;
 		}else if(read_bytes >0){
@@ -211,11 +213,13 @@ int main(int argc, char *argv[]) {
 							}
 
 							if(read_bytes < 1 || (read_bytes = socket.Send(socket_fd,url))<0){
-								cerr << "\033[31mError en el envio\033[0m\n";
+								cerr << "\033[31mError en el envio de una URL\033[0m\n";
 								salirSubastas = true;
 							}
-							cout << miID << url << endl;
-							if(read_bytes < 1 || (read_bytes =socket.Recv(socket_fd,nueva_puja,MESSAGE_SIZE))>0){
+							if(automatic){
+								cout << miID << url << endl;
+							}
+							if(read_bytes < 1 || (read_bytes =socket.Recv(socket_fd,nueva_puja,MESSAGE_SIZE))<0){
 								cerr << "\033[31mError al recibir confimacion del envio de la URL\033[0m\n";
 								salirSubastas = true;
 								socket.Close(socket_fd);
